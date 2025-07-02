@@ -1,27 +1,4 @@
-### Get all users (JSON API)
+### Ver todos os usuários (JSON API)
 GET http://localhost:8000/api/users
 Accept: application/json
-
-###
-
-### Render login page (HTML)
-GET http://localhost:8000/auth/login
-Accept: text/html
-
-###
-
-### Register a new user (adjust the form fields to match your app)
-POST http://localhost:8000/auth/register
-Content-Type: application/x-www-form-urlencoded
-
-username=youruser&password=yourpass
-
-###
-
-### Login with a user (adjust the form fields to match your app)
-POST http://localhost:8000/auth/login
-Content-Type: application/x-www-form-urlencoded
-
-username=youruser&password=yourpass
-
 ###
