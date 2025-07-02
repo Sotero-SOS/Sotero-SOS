@@ -1,12 +1,46 @@
-# React + Vite
+# SOS - Sotero
+> website desenvolvido para controle de veículos da rede Sotero
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+<img src="https://img.shields.io/badge/version-0.0.0-green" /> <img src="https://img.shields.io/badge/npm-v11.4.2-orange" />
 
-Currently, two official plugins are available:
+escrever descrição do projeto...
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ_WEpLY9GEjA9Atknbcjd4sz7biL-1Ir3rcg&s" height="300" width="500"/> (trocar a foto...)
 
-## Expanding the ESLint configuration
+## Principais tecnologias:
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- [React](https://reactjs.org/)
+- [Vite](https://vitejs.dev/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [React Router](https://reactrouter.com/)
+- [FastAPI](fastapi.tiangolo.com/)
+- [Docker](https://www.docker.com/)
+
+## Como executar o frontend localmente?
+Após clonar o repositório, acesse a pasta que foi clonada
+```bash
+git clone https://github.com/seu-usuario/sos-sotero.git
+cd sos-sotero
+```
+Estando na pasta, instale as dependências para executar o código:
+```bash
+npm install
+```
+Com as dependências instaladas, ele irá deve funcionar normalmente com:
+```bash
+npm run dev
+```
+## Como executar o fastAPI?
+...
+
+## Imagem do docker
+...
+
+## Autores
+> (colocar linkedin ou github...)
+
+Idealizado por [Jaiane Alves], o projeto foi desenvolvido por:
+- [João Victor Dórea]
+- [Daniel Simonette]
+- [Cauã]...
+- [Samir]...
