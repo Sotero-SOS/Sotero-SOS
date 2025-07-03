@@ -31,7 +31,21 @@ Com as dependências instaladas, ele irá deve funcionar normalmente com:
 npm run dev
 ```
 ## Como executar o fastAPI?
-...
+- Acesse a pasta do `backend` com:
+  ```bash
+  cd Backend/
+  ```
+- Instale as dependências do python em requirements:
+  ```bash
+  pip install -r requirements.txt
+  ```
+- Execute o servidor em um terminal com o código abaixo:
+  ```bash
+  uvicorn backend.run:app --reload
+  ```
+Com isso, o servidor estará executando no endereço http://127.0.0.1:8000
+
+Utilize `Ctrl + C` para interromper a execução do servidor no terminal
 
 ## Imagem do docker
 ...
