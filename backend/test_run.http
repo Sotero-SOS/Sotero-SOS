@@ -1,0 +1,4 @@
+### Ver todos os usuários (JSON API)
+GET http://localhost:8000/api/users
+Accept: application/json
+###
