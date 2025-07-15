@@ -6,7 +6,7 @@ from fastapi import Form, Depends
 from sqlalchemy.orm import Session
 from backend.app.database.database import get_database
 from backend.app.database.models import Setor, User, Motivo, Motorista, Veiculo, Atendimento
-from backend.app.routers.main import is_authenticated
+from backend.app.routers.main import user_esta_logado
 from datetime import datetime, date, time
 
 
@@ -30,7 +30,7 @@ async def test_db(
     veiculos = session.query(Veiculo).all()
     atendimentos = session.query(Atendimento).all()
 
-    if not is_authenticated(request):
+    if not user_esta_logado(request):
         return RedirectResponse("/auth/login")
     return templates.TemplateResponse("test_db.html", {"request": request, "setores": setores,
                                                        "motoristas": motoristas, "motivos": motivos,
@@ -60,7 +60,7 @@ async def edit_setor_post(
 
 @router.get("/setor/edit/{setor_id}") #<-- rota GET para mostrar o formulário de edição do setor
 async def edit_setor_get(request: Request, setor_id: int, session: Session = Depends(get_database)):
-    if not is_authenticated(request):
+    if not user_esta_logado(request):
         return RedirectResponse("/auth/login")
     setor = session.query(Setor).filter(Setor.id == setor_id).first()
     return templates.TemplateResponse("edit_setor.html", {"request": request, "setor": setor})
@@ -83,7 +83,7 @@ async  def create_setor_post(
 #
 @router.get("/motivo/edit/{motivo_id}") #<-- rota GET para mostrar o formulário de edição do motivo
 async def edit_motivo_get(request: Request, motivo_id: int, session: Session = Depends(get_database)):
-    if not is_authenticated(request):
+    if not user_esta_logado(request):
         return RedirectResponse("/auth/login")
     motivo = session.query(Motivo).filter(Motivo.cod_motivo == motivo_id).first()
     return templates.TemplateResponse("edit_motivo.html", {"request": request, "motivo": motivo})
@@ -130,7 +130,7 @@ async def create_motivo_post(
 #
 @router.get("/motorista/edit/{motorista_id}") #<-- rota GET para mostrar o formulário de edição do motorista
 async def edit_motorista_get(request: Request, motorista_id: int, session: Session = Depends(get_database)):
-    if not is_authenticated(request):
+    if not user_esta_logado(request):
         return RedirectResponse("/auth/login")
     motorista = session.query(Motorista).filter(Motorista.matricula == motorista_id).first()
     setores = session.query(Setor).all()
@@ -171,7 +171,7 @@ async def create_motorista_post(
 #
 @router.get("/veiculo/edit/{veiculo_id}") #<-- rota GET para mostrar o formulário de edição do veículo
 async def edit_veiculo_get(request: Request, veiculo_id: int, session: Session = Depends(get_database)):
-    if not is_authenticated(request):
+    if not user_esta_logado(request):
         return RedirectResponse("/auth/login")
     veiculo = session.query(Veiculo).filter(Veiculo.cod_veiculo == veiculo_id).first()
     motoristas = session.query(Motorista).all()
@@ -241,7 +241,7 @@ async def create_atendimento_post(
 
 @router.get("/atendimento/edit/{atendimento_id}") #<-- rota GET para mostrar o formulário de edição do atendimento
 async def edit_atendimento_get(request: Request, atendimento_id: int, session: Session = Depends(get_database)):
-    if not is_authenticated(request):
+    if not user_esta_logado(request):
         return RedirectResponse("/auth/login")
     atendimento = session.query(Atendimento).filter(Atendimento.nr_atendimento == atendimento_id).first()
     motoristas = session.query(Motorista).all()

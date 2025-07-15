@@ -7,14 +7,14 @@ from fastapi.templating import Jinja2Templates
 router = APIRouter()
 templates = Jinja2Templates(directory="backend/app/templates")
 
-def is_authenticated(request: Request):
+def user_esta_logado(request: Request):
     return request.session.get("user") is not None
 
 
 # Rota para a página inicial
-@router.get("/", include_in_schema=False)
+@router.get("/", include_in_schema=False)# <-- não inclui essa rota na documentação da API
 async def home(request: Request):
-    if not is_authenticated(request):
+    if not user_esta_logado(request):
         return RedirectResponse("/auth/login") # <-- redireciona para a tela de login se o usuário não estiver logado
 
     username = request.session.get("user")

@@ -10,7 +10,6 @@ from backend.app.routers import main, auth, test_db
 # Cria o banco de dados e as tabelas antes de iniciar o aplicativo
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    print(1111)
     criar_db_e_tables()
     yield
 
