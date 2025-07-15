@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, Request, Form, Response
 from fastapi.responses import RedirectResponse, HTMLResponse
 from fastapi.templating import Jinja2Templates
-from sqlmodel import Session, select
+from sqlalchemy.orm import Session
 
 from backend.app.database.models import User
 from backend.app.database.database import get_database
@@ -36,7 +36,7 @@ def login_post(
     password: str = Form(...),
     session: Session = Depends(get_database)
 ):
-    user = session.exec(select(User).where(User.username == username)).first()
+    user = session.query(User).filter(User.username == username).first()
     if not user or not pwd_context.verify(password, user.hashed_password):
         return templates.TemplateResponse("login.html", {"request": request, "error": "Credenciais inválidas"})
     request.session["user"] = user.username
@@ -50,13 +50,13 @@ def logout(request: Request):
     return RedirectResponse("/auth/login")
 
 
-# Rota para a tela de criação de usuário
+# Rota GET para a tela de criação de usuário
 @router.get("/register", response_class=HTMLResponse)
 def register_get(request: Request):
     return templates.TemplateResponse("register.html", {"request": request})
 
 
-# Rota para processar a criação de um novo usuário
+# Rota POST para processar a criação de um novo usuário
 @router.post("/register", response_class=HTMLResponse)
 def register_post(
     request: Request,          #
@@ -64,7 +64,7 @@ def register_post(
     password: str = Form(...), #
     session: Session = Depends(get_database)
 ):
-    user = session.exec(select(User).where(User.username == username)).first()
+    user = session.query(User).filter(User.username == username).first()
     if user: # <-- Se o usuário já existe, recarrega a página de registro com uma mensagem de erro
         return templates.TemplateResponse("register.html", {"request": request, "error": "Usuário já existe"})
 

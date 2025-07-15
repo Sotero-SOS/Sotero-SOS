@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Motorista</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 2em;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        form {
+            margin-top: 2em;
+            border: 1px solid #ccc;
+            padding: 1em;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Editar Motorista: {{ motorista.nome }} (Matrícula: {{ motorista.matricula }})</h1>
+
+    <form action="/test_db/motorista/edit/{{ motorista.matricula }}" method="post">
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" name="nome" value="{{ motorista.nome }}" required>
+        <br><br>
+        <label for="setor_id">Setor:</label>
+        <select id="setor_id" name="setor_id">
+            <option value="">Selecione o Setor</option>
+            {% for setor in setores %}
+            <option value="{{ setor.id }}" {% if setor.id == motorista.setor_id %}selected{% endif %}>{{ setor.nome_setor }}</option>
+            {% endfor %}
+        </select>
+        <br><br>
+        <button type="submit">Salvar Alterações</button>
+    </form>
+
+</body>
+</html>

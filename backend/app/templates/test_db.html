@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database Test</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 2em;
+        }
+
+        h1, h2 {
+            color: #333;
+        }
+
+        form {
+            margin-bottom: 2em;
+            border: 1px solid #ccc;
+            padding: 1em;
+            border-radius: 5px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1em;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Database Test Page</h1>
+
+    <!-- Setor Form and Table -->
+    <h2>Setores</h2>
+    <form action="/test_db/setor" method="post">
+        <input type="text" name="nome_setor" placeholder="Nome do Setor" required>
+        <input type="text" name="turno" placeholder="Turno">
+        <input type="text" name="endereco" placeholder="Endereço">
+        <button type="submit">Adicionar Setor</button>
+    </form>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Turno</th>
+                <th>Endereço</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for setor in setores %}
+            <tr>
+                <td>{{ setor.id }}</td>
+                <td>{{ setor.nome_setor }}</td>
+                <td>{{ setor.turno }}</td>
+                <td>{{ setor.endereco }}</td>
+                <td><a href="/test_db/setor/edit/{{ setor.id }}">Editar</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Motorista Form and Table -->
+    <h2>Motoristas</h2>
+    <form action="/test_db/motorista" method="post">
+        <input type="number" name="matricula" placeholder="Matrícula" required>
+        <input type="text" name="nome" placeholder="Nome" required>
+        <select name="setor_id">
+            <option value="">Selecione o Setor</option>
+            {% for setor in setores %}
+            <option value="{{ setor.id }}">{{ setor.nome_setor }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Adicionar Motorista</button>
+    </form>
+    <table>
+        <thead>
+            <tr>
+                <th>Matrícula</th>
+                <th>Nome</th>
+                <th>Setor ID</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for motorista in motoristas %}
+            <tr>
+                <td>{{ motorista.matricula }}</td>
+                <td>{{ motorista.nome }}</td>
+                <td>{{ motorista.setor_id }}</td>
+                <td><a href="/test_db/motorista/edit/{{ motorista.matricula }}">Editar</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Veiculo Form and Table -->
+    <h2>Veículos</h2>
+    <form action="/test_db/veiculo" method="post">
+        <input type="number" name="cod_veiculo" placeholder="Código do Veículo" required>
+        <input type="text" name="categoria" placeholder="Categoria">
+        <input type="text" name="situacao" placeholder="Situação">
+        <select name="matricula_funcionario" required>
+            <option value="">Selecione o Motorista</option>
+            {% for motorista in motoristas %}
+            <option value="{{ motorista.matricula }}">{{ motorista.nome }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Adicionar Veículo</button>
+    </form>
+    <table>
+        <thead>
+            <tr>
+                <th>Código</th>
+                <th>Categoria</th>
+                <th>Situação</th>
+                <th>Matrícula do Motorista</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for veiculo in veiculos %}
+            <tr>
+                <td>{{ veiculo.cod_veiculo }}</td>
+                <td>{{ veiculo.categoria }}</td>
+                <td>{{ veiculo.situacao }}</td>
+                <td>{{ veiculo.matricula_funcionario }}</td>
+                <td><a href="/test_db/veiculo/edit/{{ veiculo.cod_veiculo }}">Editar</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Motivo Form and Table -->
+    <h2>Motivos</h2>
+    <form action="/test_db/motivo" method="post">
+        <input type="text" name="descricao" placeholder="Descrição" required>
+        <input type="time" name="tempo_previsto" step="1">
+        <button type="submit">Adicionar Motivo</button>
+    </form>
+    <table>
+        <thead>
+            <tr>
+                <th>Código</th>
+                <th>Descrição</th>
+                <th>Tempo Previsto</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for motivo in motivos %}
+            <tr>
+                <td>{{ motivo.cod_motivo }}</td>
+                <td>{{ motivo.descricao }}</td>
+                <td>{{ motivo.tempo_previsto }}</td>
+                <td><a href="/test_db/motivo/edit/{{ motivo.cod_motivo }}">Editar</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Atendimento Form and Table -->
+    <h2>Atendimentos</h2>
+    <form action="/test_db/atendimento" method="post">
+        <select name="matricula_motorista" required>
+            <option value="">Selecione o Motorista</option>
+            {% for motorista in motoristas %}
+            <option value="{{ motorista.matricula }}">{{ motorista.nome }}</option>
+            {% endfor %}
+        </select>
+        <select name="cod_motivo" required>
+            <option value="">Selecione o Motivo</option>
+            {% for motivo in motivos %}
+            <option value="{{ motivo.cod_motivo }}">{{ motivo.descricao }}</option>
+            {% endfor %}
+        </select>
+        <input type="text" name="local" placeholder="Local" required>
+        <button type="submit">Adicionar Atendimento</button>
+    </form>
+    <table>
+        <thead>
+            <tr>
+                <th>Nº Atendimento</th>
+                <th>Motorista</th>
+                <th>Motivo</th>
+                <th>Local</th>
+                <th>Data</th>
+                <th>Início SOS</th>
+                <th>Chegada Garagem</th>
+                <th>Final SOS</th>
+                <th>Status</th>
+                <th>Auxiliar</th>
+                <th>Fiscal</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for atendimento in atendimentos %}
+            <tr>
+                <td>{{ atendimento.nr_atendimento }}</td>
+                <td>{{ atendimento.matricula_motorista }}</td>
+                <td>{{ atendimento.cod_motivo }}</td>
+                <td>{{ atendimento.local }}</td>
+                <td>{{ atendimento.data }}</td>
+                <td>{{ atendimento.inicio_sos }}</td>
+                <td>{{ atendimento.chegada_na_garagem }}</td>
+                <td>{{ atendimento.final_sos }}</td>
+                <td>{{ atendimento.status }}</td>
+                <td>{{ atendimento.auxiliar_de_trafego }}</td>
+                <td>{{ atendimento.fiscal }}</td>
+                <td><a href="/test_db/atendimento/edit/{{ atendimento.nr_atendimento }}">Editar</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</body>
+</html>
