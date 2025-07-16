@@ -39,12 +39,16 @@ npm run dev
   ```bash
   pip install -r requirements.txt
   ```
+- Coloque a URL e a Key do Supabase em run.py
+
 - Execute o servidor em um terminal com o código abaixo:
   ```bash
   uvicorn backend.run:app --reload
   ```
 Com isso, o servidor estará executando no endereço http://127.0.0.1:8000
-
+<br>
+Só acessar http://127.0.0.1:8000/docs para testar a API
+<br>
 Utilize `Ctrl + C` para interromper a execução do servidor no terminal
 
 ## Imagem do docker
