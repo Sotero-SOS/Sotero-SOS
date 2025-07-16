@@ -39,15 +39,6 @@ npm run dev
   ```bash
   pip install -r requirements.txt
   ```
-## Como executar o fastAPI?
-- Acesse a pasta do `backend` com:
-  ```bash
-  cd Backend/
-  ```
-- Instale as dependências do python em requirements:
-  ```bash
-  pip install -r requirements.txt
-  ```
 - **Criar uma database no Supabase**
   - Acesse [https://app.supabase.com/](https://app.supabase.com/) e crie um novo projeto (ou acesse um existente).
   - Dentro do projeto, vá até o menu lateral e clique em **SQL Editor**.
