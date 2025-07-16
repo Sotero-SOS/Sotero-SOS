@@ -39,16 +39,94 @@ npm run dev
   ```bash
   pip install -r requirements.txt
   ```
+## Como executar o fastAPI?
+- Acesse a pasta do `backend` com:
+  ```bash
+  cd Backend/
+  ```
+- Instale as dependências do python em requirements:
+  ```bash
+  pip install -r requirements.txt
+  ```
+- **Criar uma database no Supabase**
+  - Acesse [https://app.supabase.com/](https://app.supabase.com/) e crie um novo projeto (ou acesse um existente).
+  - Dentro do projeto, vá até o menu lateral e clique em **SQL Editor**.
+
+- **No SQL Editor, colocar esse código:**
+  ```sql
+  -- USERS TABLE
+  drop table if exists "user" cascade;
+  create table "user" (
+      id serial primary key,
+      username text unique not null,
+      hashed_password text not null
+  );
+
+  -- SETOR TABLE
+  drop table if exists setor cascade;
+  create table setor (
+      id serial primary key,
+      nome_setor text unique not null,
+      turno text,
+      endereco text
+  );
+
+  -- MOTORISTA TABLE
+  drop table if exists motorista cascade;
+  create table motorista (
+      matricula serial primary key,
+      nome text not null,
+      setor_id integer references setor(id)
+  );
+
+  -- VEICULO TABLE
+  drop table if exists veiculo cascade;
+  create table veiculo (
+      cod_veiculo serial primary key,
+      categoria text,
+      situacao text,
+      matricula_funcionario integer unique not null references motorista(matricula)
+  );
+
+  -- MOTIVO TABLE
+  drop table if exists motivo cascade;
+  create table motivo (
+      cod_motivo serial primary key,
+      descricao text not null,
+      tempo_previsto time
+  );
+
+  -- ATENDIMENTO TABLE
+  drop table if exists atendimento cascade;
+  create table atendimento (
+      nr_atendimento serial primary key,
+      auxiliar_de_trafego text,
+      fiscal text,
+      data date,
+      inicio_sos time,
+      chegada_na_garagem time,
+      final_sos time,
+      status text,
+      local text,
+      matricula_motorista integer not null references motorista(matricula),
+      cod_motivo integer not null references motivo(cod_motivo)
+  );
+
+  -- Optional: Indexes (for performance)
+  create index idx_user_username on "user"(username);
+  create index idx_setor_nome_setor on setor(nome_setor);
+  create index idx_motivo_descricao on motivo(descricao);
+  ```
+  - Clique em **Run** para executar e criar as tabelas.
+
 - Coloque a URL e a Key do Supabase em run.py
 
 - Execute o servidor em um terminal com o código abaixo:
   ```bash
   uvicorn backend.run:app --reload
   ```
-Com isso, o servidor estará executando no endereço http://127.0.0.1:8000
-<br>
-Só acessar http://127.0.0.1:8000/docs para testar a API
-<br>
+Com isso, o servidor estará executando no endereço http://127.0.0.1:8000  
+Só acessar http://127.0.0.1:8000/docs para testar a API  
 Utilize `Ctrl + C` para interromper a execução do servidor no terminal
 
 ## Imagem do docker
