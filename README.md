@@ -45,40 +45,40 @@ npm run dev
 
 - **No SQL Editor, colocar esse código:**
   ```sql
-  -- USERS TABLE
+    -- USERS TABLE
   drop table if exists "user" cascade;
   create table "user" (
       id serial primary key,
       username text unique not null,
-      hashed_password text not null
+      hashed_password text not null,
+      is_admin boolean not null default false
   );
-
+  
   -- SETOR TABLE
   drop table if exists setor cascade;
   create table setor (
       id serial primary key,
       nome_setor text unique not null,
-      turno text,
-      endereco text
+      turno text
   );
-
-  -- MOTORISTA TABLE
-  drop table if exists motorista cascade;
-  create table motorista (
-      matricula serial primary key,
-      nome text not null,
-      setor_id integer references setor(id)
-  );
-
+  
   -- VEICULO TABLE
   drop table if exists veiculo cascade;
   create table veiculo (
       cod_veiculo serial primary key,
       categoria text,
-      situacao text,
-      matricula_funcionario integer unique not null references motorista(matricula)
+      situacao text
   );
-
+  
+  -- MOTORISTA TABLE
+  drop table if exists motorista cascade;
+  create table motorista (
+      matricula serial primary key,
+      nome text not null,
+      setor_id integer references setor(id),
+      cod_veiculo integer references veiculo(cod_veiculo) 
+  );
+  
   -- MOTIVO TABLE
   drop table if exists motivo cascade;
   create table motivo (
@@ -86,7 +86,7 @@ npm run dev
       descricao text not null,
       tempo_previsto time
   );
-
+  
   -- ATENDIMENTO TABLE
   drop table if exists atendimento cascade;
   create table atendimento (
@@ -102,8 +102,8 @@ npm run dev
       matricula_motorista integer not null references motorista(matricula),
       cod_motivo integer not null references motivo(cod_motivo)
   );
-
-  -- Optional: Indexes (for performance)
+  
+  
   create index idx_user_username on "user"(username);
   create index idx_setor_nome_setor on setor(nome_setor);
   create index idx_motivo_descricao on motivo(descricao);
