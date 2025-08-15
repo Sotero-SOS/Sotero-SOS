@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagina de login</title>
+    <link rel="stylesheet" href="frontend.css">
+</head>
+<body>
+
+<div class="container">
+    <div class="container-infos">
+        <img src="logo.png" alt="Logo SOS"><!--Adicionar a logo aqui-->
+        <h1>LOGIN-SOS</h1>
+            <div>
+                <label for="usuario"></label>
+                <input type="text" placeholder="usuário" id="nome" required>
+            </div>
+            <div>
+                <label for="senha"></label>
+                <input type="password" placeholder="senha" id="senha" minlength="6" required>
+            </div>
+            <button onclick="document.getElementById('meuPopup').style.display='block'">Esqueceu a senha</button>
+            <div id="meuPopup">
+                <p>Entre em contato com a sua administração e solicite por uma redefinição de senha!</p>
+                <button onclick="document.getElementById('meuPopup').style.display='none'">
+                    Fechar
+                </button>
+            </div>
+            <button>ENTRAR</button>
+    </div>
+</div>
+
+</body>
+</html>
