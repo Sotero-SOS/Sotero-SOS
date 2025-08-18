@@ -45,7 +45,7 @@ npm run dev
 
 - **No SQL Editor, colocar esse código:**
   ```sql
-    -- USERS TABLE
+  -- USERS TABLE
   drop table if exists "user" cascade;
   create table "user" (
       id serial primary key,
@@ -99,14 +99,11 @@ npm run dev
       final_sos time,
       status text,
       local text,
+      atrasado boolean,
       matricula_motorista integer not null references motorista(matricula),
-      cod_motivo integer not null references motivo(cod_motivo)
+      cod_motivo integer not null references motivo(cod_motivo),
+      cod_veiculo integer not null references veiculo(cod_veiculo)
   );
-  
-  
-  create index idx_user_username on "user"(username);
-  create index idx_setor_nome_setor on setor(nome_setor);
-  create index idx_motivo_descricao on motivo(descricao);
   ```
   - Clique em **Run** para executar e criar as tabelas.
 
