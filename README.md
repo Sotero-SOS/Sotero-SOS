@@ -5,16 +5,13 @@
 
 escrever descrição do projeto...
 
-<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ_WEpLY9GEjA9Atknbcjd4sz7biL-1Ir3rcg&s" height="300" width="500"/> (trocar a foto...)
+(colocar a foto...)
 
 ## Principais tecnologias:
 
 - [React](https://reactjs.org/)
 - [Vite](https://vitejs.dev/)
 - [Tailwind CSS](https://tailwindcss.com/)
-- [React Router](https://reactrouter.com/)
-- [FastAPI](fastapi.tiangolo.com/)
-- [Docker](https://www.docker.com/)
 
 ## Como executar o frontend localmente?
 Após clonar o repositório, acesse a pasta que foi clonada
