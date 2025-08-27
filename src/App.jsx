@@ -6,7 +6,7 @@ import Home from "./routes/Home.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <LayoutApp />, // Ex: um componente com Header/Footer, etc.
+    element: <LayoutApp />,
     children: [
       {
         path: "/",

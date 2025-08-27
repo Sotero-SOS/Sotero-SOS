@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
-import AppHeader from "../components/AppHeader.jsx";
-import AppSideBar from "../components/AppSideBar.jsx";
+import AppHeader from "./AppHeader.jsx";
+import AppSideBar from "./AppSideBar.jsx";
 
 function LayoutApp() {
   const [sidebarVisible, setSidebarVisible] = useState(true);
