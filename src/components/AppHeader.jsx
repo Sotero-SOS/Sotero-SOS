@@ -1,17 +1,17 @@
-import React from 'react';
-import { FiMenu, FiChevronsLeft, FiSun, FiMoon } from 'react-icons/fi';
+import React from "react";
+import { FiMenu, FiChevronsLeft, FiSun, FiMoon } from "react-icons/fi";
 
 const ThemeSwitcher = ({ theme, setTheme }) => {
   const toggleTheme = () => {
-    setTheme(theme === 'light' ? 'dark' : 'light');
+    setTheme(theme === "light" ? "dark" : "light");
   };
 
   return (
-    <button 
+    <button
       onClick={toggleTheme}
       className="p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-slate-700 text-gray-600 dark:text-gray-400"
     >
-      {theme === 'light' ? <FiMoon size={20} /> : <FiSun size={20} />}
+      {theme === "light" ? <FiMoon size={20} /> : <FiSun size={20} />}
     </button>
   );
 };

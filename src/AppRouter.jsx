@@ -1,28 +1,8 @@
-<<<<<<< HEAD
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import AppLogin from "./pages/AppLogin.jsx";
-import LayoutApp from "./layouts/LayoutApp.jsx";
-import AppHomepage from "./pages/AppHomepage.jsx";
-import AppNovoAtendimento from "./pages/AppNovoAtendimento.jsx";
-
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <AppLogin />,
-  },
-  {
-    path: "/Home",
-    element: <LayoutApp />,
-    children: [
-      {
-        path: "/Home",
-        element: <AppHomepage />,
-      },
-      {
-        path: "/Home/atendimentos",
-        element: <AppNovoAtendimento />,
-=======
-import { createBrowserRouter, RouterProvider, Navigate } from "react-router-dom";
+import {
+  createBrowserRouter,
+  RouterProvider,
+  Navigate,
+} from "react-router-dom";
 import AppLogin from "./pages/AppLogin.jsx";
 import LayoutApp from "./layouts/LayoutApp.jsx";
 import EditarAtendimento from "./components/EditarAtendimento.tsx";
@@ -40,9 +20,9 @@ function ProtectedLayout() {
 
   if (loading) {
     return (
-        <div className="flex items-center justify-center min-h-screen text-gray-600 dark:text-gray-200">
-          Verificando sessão...
-        </div>
+      <div className="flex items-center justify-center min-h-screen text-gray-600 dark:text-gray-200">
+        Verificando sessão...
+      </div>
     );
   }
 
@@ -70,23 +50,16 @@ const router = createBrowserRouter([
       {
         path: "/Home/configuracoes",
         element: (
-            <div className="card">
-              <h2>Configurações</h2>
-              <p>Em desenvolvimento...</p>
-            </div>
+          <div className="card">
+            <h2>Configurações</h2>
+            <p>Em desenvolvimento...</p>
+          </div>
         ),
->>>>>>> origin
       },
     ],
   },
 ]);
 
-<<<<<<< HEAD
-export default function App() {
-  return <RouterProvider router={router} />;
-}
-=======
 export default function AppRouter() {
   return <RouterProvider router={router} />;
 }
->>>>>>> origin

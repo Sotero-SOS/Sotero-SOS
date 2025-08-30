@@ -1,9 +1,6 @@
 @import "tailwindcss";
-<<<<<<< HEAD
-=======
 /* Import additional component styles */
 @import "./frontend.css";
->>>>>>> origin
 
 :root {
   margin: 0 auto;
@@ -83,7 +80,6 @@ h1 {
   color: #1a1a1a;
   font-size: 2em;
   line-height: 2;
-<<<<<<< HEAD
 }
 /*
 button {
@@ -106,6 +102,3 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
   */
-=======
-}
->>>>>>> origin

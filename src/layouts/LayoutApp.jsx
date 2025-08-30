@@ -1,20 +1,11 @@
 import { useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
-<<<<<<< HEAD
-import AppHeader from "../components/AppHeader.jsx";
-import AppSideBar from "../components/AppSideBar.jsx";
-
-function LayoutApp() {
-  const [sidebarVisible, setSidebarVisible] = useState(true);
-  const [theme, setTheme] = useState("light");
-=======
 import AppHeader from "./AppHeader.jsx";
 import AppSideBar from "./AppSideBar.jsx";
 
 function LayoutApp() {
   const [sidebarVisible, setSidebarVisible] = useState(true);
   const [theme, setTheme] = useState("dark");
->>>>>>> origin
 
   useEffect(() => {
     if (theme === "dark") {
