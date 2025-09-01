@@ -6,7 +6,7 @@ import ForgotPasswordModal from "../components/ForgotPasswordModal";
 import { supabase } from "../supabaseClient.js";
 import { useAuth } from "../lib/AuthProvider.jsx";
 
-const TABLE_NAME = "user";
+const TABLE_NAME = "usuario";
 
 function AppLogin() {
   const { user, loading, login } = useAuth();
@@ -33,7 +33,7 @@ function AppLogin() {
 
     const { data, error: dbError } = await supabase
       .from(TABLE_NAME)
-      .select("id, username, hashed_password, is_admin")
+      .select("id, username, hashed_password, tipo")
       .eq("username", username.trim())
       .single();
 

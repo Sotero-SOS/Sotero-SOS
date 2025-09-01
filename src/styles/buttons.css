@@ -1,0 +1,52 @@
+/*ESTILOS DE TODOS OS BOTÕES DO SISTEMA*/
+
+.card button {
+  background: linear-gradient(135deg,#2563eb,#2563eb 30%,#1d4ed8);
+  color: #fff;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 2px 4px rgba(37,99,235,.3);
+  transition: background .25s, transform .15s, box-shadow .25s;
+}
+
+.card button:hover:not(:disabled) {
+  background: linear-gradient(135deg,#1d4ed8,#1d4ed8 30%,#1e40af);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(37,99,235,.35);
+}
+
+.card button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.card button:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+}
+
+button.secundario {
+  background: #f1f5f9;
+  color: #1e293b;
+  box-shadow: none;
+}
+
+button.secundario:hover {
+  background: #e2e8f0;
+  box-shadow: none;
+}
+
+.dark button.secundario {
+  background: #2d3b4f;
+  color: #e2e8f0;
+}
+
+.dark button.secundario:hover {
+  background: #384b63;
+}

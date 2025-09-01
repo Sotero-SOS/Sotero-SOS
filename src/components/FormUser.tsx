@@ -2,7 +2,7 @@ import { useEffect, useState, useMemo } from "react";
 import { supabase } from "../supabaseClient";
 import { useAuth } from "../lib/AuthProvider.jsx";
 
-const TABLE_NAME = "user"; // must match your existing table
+const TABLE_NAME = "usuario"; // must match your existing table
 
 export default function FormUser() {
   const { user /*, isAdmin */ } = useAuth();
@@ -33,7 +33,7 @@ export default function FormUser() {
     // Avoid selecting hashed_password (don’t expose it)
     const { data, error } = await supabase
       .from(TABLE_NAME)
-      .select("id, username, is_admin")
+      .select("id, username, tipo")
       .order("username", { ascending: true });
 
     if (error) {
