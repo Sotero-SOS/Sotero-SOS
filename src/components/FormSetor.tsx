@@ -2,6 +2,9 @@ import { useEffect, useState } from 'react';
 import { supabase } from '../supabaseClient';
 import type { Setor } from '../types';
 
+/**
+ * Cadastro simples de setores com nome e turno.
+ */
 export default function FormSetor() {
     const [nome, setNome] = useState('');
     const [turno, setTurno] = useState('');
@@ -11,6 +14,7 @@ export default function FormSetor() {
     const [lista, setLista] = useState<Setor[]>([]);
     const [carregandoLista, setCarregandoLista] = useState(false);
 
+    // Carrega lista de setores
     const carregarLista = async () => {
         setCarregandoLista(true);
         const { data, error } = await supabase
@@ -85,6 +89,7 @@ export default function FormSetor() {
                 {statusMsg && <p className="status">{statusMsg}</p>}
             </form>
 
+            {/* Lista de setores */}
             <div style={{ marginTop: 24 }}>
                 <h3 style={{ margin: '8px 0' }}>Setores cadastrados</h3>
                 {carregandoLista ? (
@@ -110,4 +115,5 @@ export default function FormSetor() {
             </div>
         </div>
     );
+
 }

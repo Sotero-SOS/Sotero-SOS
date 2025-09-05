@@ -7,6 +7,9 @@ type MotoristaExpandido = Motorista & {
     veiculo_categoria?: string | null;
 };
 
+/**
+ * Cadastro de motoristas, vinculando setor e veículo.
+ */
 export default function FormMotorista() {
     const [matricula, setMatricula] = useState<number | ''>('');
     const [nome, setNome] = useState('');
@@ -20,6 +23,7 @@ export default function FormMotorista() {
     const [lista, setLista] = useState<MotoristaExpandido[]>([]);
     const [carregandoLista, setCarregandoLista] = useState(false);
 
+    // Carrega dados auxiliares (setores e veículos)
     const carregarBasicos = async () => {
         const [{ data: setoresData }, { data: veicData }] = await Promise.all([
             supabase.from('setor').select('*').order('nome_setor', { ascending: true }),
@@ -29,6 +33,7 @@ export default function FormMotorista() {
         setVeiculos(veicData ?? []);
     };
 
+    // Carrega a lista de motoristas e expande nomes de setor/categoria
     const carregarLista = async () => {
         setCarregandoLista(true);
         const { data: motData, error } = await supabase
@@ -57,7 +62,7 @@ export default function FormMotorista() {
         })();
     }, []);
 
-    // Recarrega lista quando setores/veículos carregarem
+    // Quando setores/veículos mudam, recarregamos lista (depende deles para expandir)
     useEffect(() => {
         if (setores.length >= 0 && veiculos.length >= 0) {
             carregarLista();
@@ -87,6 +92,7 @@ export default function FormMotorista() {
             setStatusMsg(`Erro ao salvar: ${error.message}`);
         } else {
             setStatusMsg('Motorista adicionado com sucesso!');
+            // Limpa form
             setMatricula('');
             setNome('');
             setSetorId('');
@@ -155,6 +161,7 @@ export default function FormMotorista() {
                 {statusMsg && <p className="status">{statusMsg}</p>}
             </form>
 
+            {/* Lista de motoristas */}
             <div style={{ marginTop: 24 }}>
                 <h3 style={{ margin: '8px 0' }}>Motoristas cadastrados</h3>
                 {carregandoLista ? (
@@ -175,9 +182,9 @@ export default function FormMotorista() {
                                 <span>{m.nome}</span>
                                 <span>{m.setor_nome || m.setor_id || '—'}</span>
                                 <span>
-                  {m.cod_veiculo}
+                                    {m.cod_veiculo}
                                     {m.veiculo_categoria ? ` (${m.veiculo_categoria})` : ''}
-                </span>
+                                </span>
                             </div>
                         ))}
                     </div>
@@ -185,4 +192,5 @@ export default function FormMotorista() {
             </div>
         </div>
     );
+
 }

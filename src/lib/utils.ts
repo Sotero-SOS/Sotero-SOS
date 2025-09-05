@@ -1,4 +1,4 @@
-// Utilidades compartilhadas (sem dependência de outros componentes de UI)
+// Funções utilitárias reutilizadas em vários componentes.
 
 import type { Atendimento, Motorista, Motivo, Veiculo } from "../types";
 
@@ -14,6 +14,9 @@ export function horaAgora(): string {
     return `${hh}:${mm}:${ss}`;
 }
 
+/**
+ * Monta um Date a partir de data (YYYY-MM-DD) e hora (HH:MM:SS).
+ */
 export function parseDataHora(
     data: string | null | undefined,
     hora: string | null | undefined
@@ -24,6 +27,9 @@ export function parseDataHora(
     return isNaN(d.getTime()) ? null : d;
 }
 
+/**
+ * Converte tempo "HH:MM:SS" em milissegundos.
+ */
 export function tempoPrevistoMs(tempo: string | null | undefined): number {
     if (!tempo) return 0;
     const parts = tempo.split(":").map((p) => parseInt(p || "0", 10));
@@ -60,17 +66,24 @@ export interface AtendimentoEnriquecido extends Atendimento {
     veiculo?: Veiculo | null;
 }
 
+/**
+ * Enriquecer atendimentos com:
+ * - nomes de motorista e motivo
+ * - tempo previsto e cálculo de atraso
+ * - tempo decorrido (atualiza via tick)
+ * - dados do veículo
+ */
 export function enriquecerAtendimentos(args: {
     atendimentos: Atendimento[];
     motoristas: Motorista[];
     motivos: Motivo[];
     veiculos?: Veiculo[];
-    tick: number;
+    tick: number; // usado para re-render de tempo decorrido
 }): AtendimentoEnriquecido[] {
     const { atendimentos, motoristas, motivos, veiculos = [], tick } = args;
-    // O tick é usado apenas para forçar recomputação em componentes React
-    void tick;
+    void tick; // só força recalcular
 
+    // Índices rápidos para lookup
     const mapaMotorista = new Map<number, string>();
     motoristas.forEach((m) => {
         if (m.matricula != null) mapaMotorista.set(m.matricula, m.nome);
@@ -95,6 +108,7 @@ export function enriquecerAtendimentos(args: {
         const inicio = parseDataHora(a.data ?? null, a.inicio_sos ?? null);
         const msPrev = tempoPrevistoMs(motivoInfo?.tempo ?? null);
 
+        // Calcula se está atrasado comparando tempo decorrido com previsto
         let calculadoAtrasado = false;
         if (inicio && msPrev > 0) {
             const final =
@@ -104,8 +118,10 @@ export function enriquecerAtendimentos(args: {
             calculadoAtrasado = diff > msPrev;
         }
 
+        // Se já veio flag "atrasado" do banco, usamos; senão usamos cálculo
         const isAtrasado = a.atrasado ?? calculadoAtrasado;
 
+        // Tempo decorrido (ms) até agora ou até final_sos se fechado
         let tempo_decorrido_ms: number | null = null;
         if (inicio) {
             if (a.status === "Fechado") {
@@ -130,4 +146,5 @@ export function enriquecerAtendimentos(args: {
             veiculo: mapaVeiculo.get(a.cod_veiculo) ?? null,
         };
     });
+
 }

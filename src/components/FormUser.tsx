@@ -2,21 +2,16 @@ import { useEffect, useState, useMemo } from 'react';
 import { supabase } from '../supabaseClient';
 import { useAuth } from '../lib/AuthProvider.jsx';
 
-const TABLE_NAME = 'user'; // must match your existing table
+const TABLE_NAME = 'user'; // Nome da tabela no banco
 
+/**
+ * Gerenciamento simples de usuários.
+ * IMPORTANTE: Senha está sendo salva em texto simples (deveria usar hash).
+ */
 export default function FormUser() {
     const { user /*, isAdmin */ } = useAuth();
 
-    // If you want only admins to access, uncomment:
-    // if (!isAdmin) {
-    //   return (
-    //     <div className="card">
-    //       <h2>Usuários</h2>
-    //       <p>Acesso negado (somente administradores).</p>
-    //     </div>
-    //   );
-    // }
-
+    // Estados do formulário de criação
     const [username, setUsername] = useState('');
     const [plainPassword, setPlainPassword] = useState('');
     const [isAdminNew, setIsAdminNew] = useState(false);
@@ -24,13 +19,14 @@ export default function FormUser() {
     const [statusMsg, setStatusMsg] = useState(null);
     const [carregando, setCarregando] = useState(false);
 
+    // Lista de usuários
     const [lista, setLista] = useState([]);
     const [carregandoLista, setCarregandoLista] = useState(false);
     const [busca, setBusca] = useState('');
 
+    // Carrega usuários (sem o campo de senha)
     const carregarLista = async () => {
         setCarregandoLista(true);
-        // Avoid selecting hashed_password (don’t expose it)
         const { data, error } = await supabase
             .from(TABLE_NAME)
             .select('id, username, is_admin')
@@ -64,11 +60,12 @@ export default function FormUser() {
         }
 
         setCarregando(true);
+        // Atenção: senha armazenada "como veio" (não seguro)
         const { error } = await supabase
             .from(TABLE_NAME)
             .insert({
                 username: username.trim(),
-                hashed_password: plainPassword, // plain for now
+                hashed_password: plainPassword,
                 is_admin: isAdminNew,
             });
 
@@ -86,6 +83,7 @@ export default function FormUser() {
         }
     };
 
+    // Filtro de busca simples
     const usuariosFiltrados = useMemo(() => {
         const termo = busca.trim().toLowerCase();
         if (!termo) return lista;
@@ -99,8 +97,9 @@ export default function FormUser() {
     return (
         <div className="card" style={{ maxWidth: 900 }}>
             <h2 style={{ marginTop: 0 }}>Usuários</h2>
-            <br></br>
+            <br />
 
+            {/* Formulário de criação */}
             <form onSubmit={onSubmit} style={{ marginBottom: 28 }}>
                 <label>
                     Username
@@ -155,6 +154,7 @@ export default function FormUser() {
                 )}
             </form>
 
+            {/* Barra de busca + botão recarregar */}
             <div
                 style={{
                     marginBottom: 14,
@@ -188,6 +188,7 @@ export default function FormUser() {
                 </button>
             </div>
 
+            {/* Tabela de usuários */}
             <div>
                 <h3 style={{ margin: '8px 0' }}>Usuários cadastrados</h3>
                 {carregandoLista ? (
@@ -218,19 +219,18 @@ export default function FormUser() {
                                 <span>{u.id}</span>
                                 <span>{u.username}</span>
                                 <span>
-                  {u.is_admin ? (
-                      <span className="badge ok">Admin</span>
-                  ) : (
-                      <span className="badge proc">User</span>
-                  )}
-                </span>
+                                    {u.is_admin ? (
+                                        <span className="badge ok">Admin</span>
+                                    ) : (
+                                        <span className="badge proc">User</span>
+                                    )}
+                                </span>
                             </div>
                         ))}
                     </div>
                 )}
             </div>
-
-
         </div>
     );
+
 }

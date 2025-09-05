@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { supabase } from '../supabaseClient';
 import type { Veiculo } from '../types';
 
+// Lista fixa de categorias disponíveis
 const CATEGORIAS = [
     'SUPER TOCO',
     'TRUCK',
@@ -12,6 +13,9 @@ const CATEGORIAS = [
     'ROLL-ON ROLL-OFF',
 ] as const;
 
+/**
+ * Cadastro de veículos com categoria e situação (opcional).
+ */
 export default function FormVeiculo() {
     const [codigo, setCodigo] = useState<number | ''>('');
     const [categoria, setCategoria] = useState<string>('');
@@ -22,6 +26,7 @@ export default function FormVeiculo() {
     const [lista, setLista] = useState<Veiculo[]>([]);
     const [carregandoLista, setCarregandoLista] = useState(false);
 
+    // Carrega veículos cadastrados
     const carregarLista = async () => {
         setCarregandoLista(true);
         const { data, error } = await supabase
@@ -61,6 +66,7 @@ export default function FormVeiculo() {
             setStatusMsg(`Erro ao salvar: ${error.message}`);
         } else {
             setStatusMsg('Veículo adicionado com sucesso!');
+            // Limpa form
             setCodigo('');
             setCategoria('');
             setSituacao('');
@@ -112,6 +118,7 @@ export default function FormVeiculo() {
                 {statusMsg && <p className="status">{statusMsg}</p>}
             </form>
 
+            {/* Lista de veículos */}
             <div style={{ marginTop: 24 }}>
                 <h3 style={{ margin: '8px 0' }}>Veículos cadastrados</h3>
                 {carregandoLista ? (
@@ -137,4 +144,5 @@ export default function FormVeiculo() {
             </div>
         </div>
     );
+
 }

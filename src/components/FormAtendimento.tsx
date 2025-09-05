@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { supabase } from '../supabaseClient';
 import type { Motorista, Motivo, Veiculo } from '../types';
 
+/** Retorna data de hoje no formato YYYY-MM-DD */
 function dataHoje(): string {
     const d = new Date();
     const yyyy = d.getFullYear();
@@ -10,6 +11,7 @@ function dataHoje(): string {
     return `${yyyy}-${mm}-${dd}`;
 }
 
+/** Hora atual em HH:MM:SS */
 function horaAgora(): string {
     const d = new Date();
     const hh = String(d.getHours()).padStart(2, '0');
@@ -20,6 +22,11 @@ function horaAgora(): string {
 
 type MotoristaExpandido = Motorista & { veiculo?: Veiculo | null };
 
+/**
+ * Formulário para abrir um novo atendimento (SOS).
+ * - Seleciona motorista -> já puxa o veículo associado (se existir).
+ * - Registra início com data/hora atuais.
+ */
 export default function FormAtendimento() {
     const [motoristas, setMotoristas] = useState<Motorista[]>([]);
     const [motivos, setMotivos] = useState<Motivo[]>([]);
@@ -30,6 +37,7 @@ export default function FormAtendimento() {
     const [statusMsg, setStatusMsg] = useState<string | null>(null);
     const [carregando, setCarregando] = useState(false);
 
+    // Carrega listas iniciais (motoristas / motivos / veículos)
     useEffect(() => {
         const carregar = async () => {
             const [mRes, moRes, vRes] = await Promise.all([
@@ -47,6 +55,7 @@ export default function FormAtendimento() {
         carregar();
     }, []);
 
+    // "Enriquece" motoristas com o veículo dele (se houver)
     const motoristasComVeiculo: MotoristaExpandido[] = useMemo(() => {
         const mapV = new Map(veiculos.map((v) => [v.cod_veiculo, v]));
         return motoristas.map((m) => ({ ...m, veiculo: mapV.get(m.cod_veiculo ?? -1) ?? null }));
@@ -56,12 +65,13 @@ export default function FormAtendimento() {
         e.preventDefault();
         setStatusMsg(null);
 
+        // Validação simples de campos obrigatórios
         if (matricula === '' || codMotivo === '' || !local.trim()) {
             setStatusMsg('Informe motorista, motivo e local do SOS.');
             return;
         }
 
-        // Determinar veículo do motorista selecionado
+        // Descobre veículo do motorista selecionado
         const m = motoristas.find((mm) => mm.matricula === Number(matricula));
         const veic = m?.cod_veiculo;
         if (!veic) {
@@ -69,6 +79,7 @@ export default function FormAtendimento() {
             return;
         }
 
+        // Monta payload com horários iniciais
         const payload = {
             auxiliar_de_trafego: null,
             fiscal: null,
@@ -91,6 +102,7 @@ export default function FormAtendimento() {
             setStatusMsg(`Erro ao salvar: ${error.message}`);
         } else {
             setStatusMsg('Atendimento criado com sucesso!');
+            // Limpa formulário
             setMatricula('');
             setCodMotivo('');
             setLocal('');
@@ -138,4 +150,5 @@ export default function FormAtendimento() {
             {statusMsg && <p className="status">{statusMsg}</p>}
         </form>
     );
+
 }
