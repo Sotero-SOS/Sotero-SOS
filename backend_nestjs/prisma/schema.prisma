@@ -1,0 +1,137 @@
+// Schema do banco PostgreSQL para o projeto Sotero-SOS
+// Migração do sistema Excel para backend NestJS + PostgreSQL
+// Este arquivo define todas as tabelas e relacionamentos do sistema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ENUMs - Valores fixos permitidos para certas colunas
+
+// Tipos de usuário do sistema
+enum TipoUsuario {
+  coordenador
+  trafego
+  operacional
+  admin
+}
+
+// Turnos de trabalho
+enum Turno {
+  manha
+  tarde
+  noite
+  madrugada
+}
+
+// Status dos atendimentos SOS
+enum StatusAtendimento {
+  aberto
+  em_andamento
+  concluido
+  cancelado
+}
+
+// Situação atual dos veículos
+enum SituacaoVeiculo {
+  operacional
+  manutencao
+  inativo
+}
+
+// TABELAS DO BANCO
+
+// Usuários do sistema (funcionários que usam o sistema)
+model Usuario {
+  id              Int         @id @default(autoincrement())
+  username        String      @unique
+  hashed_password String      @map("hashed_password")
+  tipo            TipoUsuario
+  nome            String?
+  
+  // Um usuário pode fiscalizar vários atendimentos
+  atendimentos_fiscalizados Atendimento[] @relation("FiscalAtendimento")
+  
+  @@map("usuario")
+}
+
+// Setores da empresa (ex: Operações manhã, Operações tarde)
+model Setor {
+  id         Int     @id @default(autoincrement())
+  nome_setor String  @unique @map("nome_setor")
+  turno      Turno?
+  
+  // Um setor pode ter vários motoristas
+  motoristas Motorista[]
+  
+  @@map("setor")
+}
+
+// Veículos da frota (caminhões, triciclos, etc)
+model Veiculo {
+  cod_veiculo Int              @id @default(autoincrement()) @map("cod_veiculo")
+  categoria   String?          // Ex: SUPER TOCO, TRUCK, TRICICLO
+  situacao    SituacaoVeiculo  @default(operacional)
+  
+  // Um veículo pode ter vários atendimentos
+  atendimentos Atendimento[]
+  
+  @@map("veiculo")
+}
+
+// Motoristas da empresa
+model Motorista {
+  matricula Int     @id @default(autoincrement())
+  nome      String
+  setor_id  Int?    @map("setor_id")
+  
+  // Relacionamentos: motorista pertence a um setor e pode ter vários atendimentos
+  setor        Setor?        @relation(fields: [setor_id], references: [id])
+  atendimentos Atendimento[]
+  
+  @@map("motorista")
+}
+
+// Motivos dos chamados SOS (ex: pneu furado, problema mecânico)
+model Motivo {
+  cod_motivo     Int   @id @default(autoincrement()) @map("cod_motivo")
+  descricao      String
+  tempo_previsto String? @map("tempo_previsto") // Tempo estimado para resolver (HH:MM:SS)
+  
+  // Um motivo pode ser usado em vários atendimentos
+  atendimentos Atendimento[]
+  
+  @@map("motivo")
+}
+
+// Atendimentos SOS (cada chamado/ocorrência)
+model Atendimento {
+  nr_atendimento      Int               @id @default(autoincrement()) @map("nr_atendimento")
+  auxiliar            String?           // Nome do auxiliar de tráfego
+  fiscal_id           Int?              @map("fiscal_id")
+  data                String?           // Data do atendimento (YYYY-MM-DD)
+  inicio_sos          String?           @default("now()") @map("inicio_sos") // Hora que começou (HH:MM:SS)
+  chegada_na_garagem  String?           @map("chegada_na_garagem") // Hora que chegou na garagem (HH:MM:SS)
+  final_sos           String?           @map("final_sos") // Hora que terminou (HH:MM:SS)
+  status              StatusAtendimento @default(aberto)
+  local               String?           // Local da ocorrência
+  atrasado            Boolean?          // Se o atendimento atrasou
+  matricula_motorista Int               @map("matricula_motorista")
+  cod_motivo          Int               @map("cod_motivo")
+  cod_veiculo         Int               @map("cod_veiculo")
+  
+  // Relacionamentos: cada atendimento tem fiscal, motorista, motivo e veículo
+  fiscal    Usuario?  @relation("FiscalAtendimento", fields: [fiscal_id], references: [id])
+  motorista Motorista @relation(fields: [matricula_motorista], references: [matricula])
+  motivo    Motivo    @relation(fields: [cod_motivo], references: [cod_motivo])
+  veiculo   Veiculo   @relation(fields: [cod_veiculo], references: [cod_veiculo])
+  
+  @@map("atendimento")
+}
+

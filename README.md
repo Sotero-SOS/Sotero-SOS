@@ -9,9 +9,15 @@ Toda a frota de compactadores da Sotero é acompanhada 24 horas por dia. A fim d
 
 ## Principais tecnologias:
 
+### Frontend
 - [React](https://reactjs.org/)
 - [Vite](https://vitejs.dev/)
 - [Tailwind CSS](https://tailwindcss.com/)
+
+### Backend
+- [NestJS](https://nestjs.com/)
+- [Prisma](https://www.prisma.io/)
+- [PostgreSQL](https://www.postgresql.org/)
 
 ## Funcionalidades
 A plataforma SOS Web permite uma gestão de colaboradores, permitindo operações de CRUD, visualização dos veículos em circulação em tempo real via dashboard, geração de relatórios com estatísticas dos atendimentos realidos pelos operadores da Sotero e integração para notificações em tempo real da localização do veículo, controle de velocidade e sinais de fadiga do motorista.
@@ -134,6 +140,31 @@ Utilize `Ctrl + C` para interromper a execução do servidor no terminal
 =======
 >>>>>>> origin
 
+## Como executar o backend localmente?
+O backend está sendo migrado de Python para NestJS. Para executar:
+
+```bash
+cd backend_nestjs
+```
+Instale as dependências:
+```bash
+npm install
+```
+Execute o servidor:
+```bash
+npm run start
+```
+O backend estará disponível em `http://localhost:3000`
+
+### Rotas disponíveis:
+- `GET /sos/setor` - Lista todos os setores
+- `POST /sos/setor/create` - Cria um novo setor
+- `GET /sos/setor/:id` - Busca setor por ID
+- `PATCH /sos/setor/edit/:id` - Atualiza setor
+- `DELETE /sos/setor/:id` - Remove setor
+
+**_Atualmente usando dados mock. PostgreSQL + Prisma será configurado em breve..._**
+
 ## Autores
 > (colocar linkedin ou github...)
 
@@ -142,3 +173,4 @@ O projeto está sendo desenvolvido por:
 - [Daniel Simonette]
 - [Cauã]...
 - [Samir]...
+- [Fredson Santana](https://github.com/fredson0)
