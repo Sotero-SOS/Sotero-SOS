@@ -1,12 +1,17 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class CreateSetorDto {
+export class SetorResponseDto {
+  @ApiProperty({
+    description: 'ID único do setor',
+    example: 1,
+    type: Number
+  })
+  id: number;
+
   @ApiProperty({
     description: 'Nome do setor da empresa',
     example: 'Operações Manhã',
-    type: String,
-    minLength: 3,
-    maxLength: 100
+    type: String
   })
   nome_setor: string;
 
@@ -14,7 +19,7 @@ export class CreateSetorDto {
     description: 'Turno de trabalho do setor',
     example: 'manha',
     enum: ['manha', 'tarde', 'noite', 'madrugada'],
-    required: false
+    nullable: true
   })
-  turno?: 'manha' | 'tarde' | 'noite' | 'madrugada';
+  turno: 'manha' | 'tarde' | 'noite' | 'madrugada' | null;
 }

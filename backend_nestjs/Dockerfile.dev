@@ -1,0 +1,26 @@
+# Dockerfile para desenvolvimento - Sotero SOS
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Instalar git para dependências que possam precisar
+RUN apk add --no-cache git
+
+# Copiar arquivos de dependências
+COPY package*.json ./
+COPY prisma ./prisma/
+
+# Instalar dependências
+RUN npm install
+
+# Copiar código fonte
+COPY . .
+
+# Gerar cliente Prisma
+RUN npx prisma generate
+
+# Expor porta
+EXPOSE 3000
+
+# Comando padrão para desenvolvimento
+CMD ["npm", "run", "start:dev"]

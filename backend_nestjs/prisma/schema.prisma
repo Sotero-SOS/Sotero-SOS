@@ -1,5 +1,5 @@
-// Schema do banco PostgreSQL para o projeto Sotero-SOS
-// Migração do sistema Excel para backend NestJS + PostgreSQL
+// Schema do banco MariaDB para o projeto Sotero-SOS
+// Migração do sistema Excel para backend NestJS + MariaDB
 // Este arquivo define todas as tabelas e relacionamentos do sistema
 
 generator client {
@@ -8,11 +8,12 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
-// ENUMs - Valores fixos permitidos para certas colunas
+// ENUMs - Para MariaDB, usamos strings com validação
+// Valores fixos permitidos para certas colunas
 
 // Tipos de usuário do sistema
 enum TipoUsuario {
@@ -50,10 +51,10 @@ enum SituacaoVeiculo {
 // Usuários do sistema (funcionários que usam o sistema)
 model Usuario {
   id              Int         @id @default(autoincrement())
-  username        String      @unique
-  hashed_password String      @map("hashed_password")
+  username        String      @unique @db.VarChar(100)
+  hashed_password String      @map("hashed_password") @db.VarChar(255)
   tipo            TipoUsuario
-  nome            String?
+  nome            String?     @db.VarChar(200)
   
   // Um usuário pode fiscalizar vários atendimentos
   atendimentos_fiscalizados Atendimento[] @relation("FiscalAtendimento")
@@ -64,7 +65,7 @@ model Usuario {
 // Setores da empresa (ex: Operações manhã, Operações tarde)
 model Setor {
   id         Int     @id @default(autoincrement())
-  nome_setor String  @unique @map("nome_setor")
+  nome_setor String  @unique @map("nome_setor") @db.VarChar(100)
   turno      Turno?
   
   // Um setor pode ter vários motoristas
@@ -76,7 +77,7 @@ model Setor {
 // Veículos da frota (caminhões, triciclos, etc)
 model Veiculo {
   cod_veiculo Int              @id @default(autoincrement()) @map("cod_veiculo")
-  categoria   String?          // Ex: SUPER TOCO, TRUCK, TRICICLO
+  categoria   String?          @db.VarChar(50) // Ex: SUPER TOCO, TRUCK, TRICICLO
   situacao    SituacaoVeiculo  @default(operacional)
   
   // Um veículo pode ter vários atendimentos
@@ -88,7 +89,7 @@ model Veiculo {
 // Motoristas da empresa
 model Motorista {
   matricula Int     @id @default(autoincrement())
-  nome      String
+  nome      String  @db.VarChar(200)
   setor_id  Int?    @map("setor_id")
   
   // Relacionamentos: motorista pertence a um setor e pode ter vários atendimentos
@@ -101,8 +102,8 @@ model Motorista {
 // Motivos dos chamados SOS (ex: pneu furado, problema mecânico)
 model Motivo {
   cod_motivo     Int   @id @default(autoincrement()) @map("cod_motivo")
-  descricao      String
-  tempo_previsto String? @map("tempo_previsto") // Tempo estimado para resolver (HH:MM:SS)
+  descricao      String @db.VarChar(255)
+  tempo_previsto String? @map("tempo_previsto") @db.VarChar(10) // Tempo estimado para resolver (HH:MM:SS)
   
   // Um motivo pode ser usado em vários atendimentos
   atendimentos Atendimento[]
@@ -113,14 +114,14 @@ model Motivo {
 // Atendimentos SOS (cada chamado/ocorrência)
 model Atendimento {
   nr_atendimento      Int               @id @default(autoincrement()) @map("nr_atendimento")
-  auxiliar            String?           // Nome do auxiliar de tráfego
+  auxiliar            String?           @db.VarChar(200) // Nome do auxiliar de tráfego
   fiscal_id           Int?              @map("fiscal_id")
-  data                String?           // Data do atendimento (YYYY-MM-DD)
-  inicio_sos          String?           @default("now()") @map("inicio_sos") // Hora que começou (HH:MM:SS)
-  chegada_na_garagem  String?           @map("chegada_na_garagem") // Hora que chegou na garagem (HH:MM:SS)
-  final_sos           String?           @map("final_sos") // Hora que terminou (HH:MM:SS)
+  data                String?           @db.VarChar(10) // Data do atendimento (YYYY-MM-DD)
+  inicio_sos          String?           @map("inicio_sos") @db.VarChar(10) // Hora que começou (HH:MM:SS)
+  chegada_na_garagem  String?           @map("chegada_na_garagem") @db.VarChar(10) // Hora que chegou na garagem (HH:MM:SS)
+  final_sos           String?           @map("final_sos") @db.VarChar(10) // Hora que terminou (HH:MM:SS)
   status              StatusAtendimento @default(aberto)
-  local               String?           // Local da ocorrência
+  local               String?           @db.VarChar(500) // Local da ocorrência
   atrasado            Boolean?          // Se o atendimento atrasou
   matricula_motorista Int               @map("matricula_motorista")
   cod_motivo          Int               @map("cod_motivo")

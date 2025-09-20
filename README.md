@@ -17,7 +17,8 @@ Toda a frota de compactadores da Sotero é acompanhada 24 horas por dia. A fim d
 ### Backend
 - [NestJS](https://nestjs.com/)
 - [Prisma](https://www.prisma.io/)
-- [PostgreSQL](https://www.postgresql.org/)
+- [MariaDB](https://mariadb.org/)
+- [Docker](https://www.docker.com/)
 
 ## Funcionalidades
 A plataforma SOS Web permite uma gestão de colaboradores, permitindo operações de CRUD, visualização dos veículos em circulação em tempo real via dashboard, geração de relatórios com estatísticas dos atendimentos realidos pelos operadores da Sotero e integração para notificações em tempo real da localização do veículo, controle de velocidade e sinais de fadiga do motorista.
@@ -141,20 +142,21 @@ Utilize `Ctrl + C` para interromper a execução do servidor no terminal
 >>>>>>> origin
 
 ## Como executar o backend localmente?
-O backend está sendo migrado de Python para NestJS. Para executar:
+O backend está sendo migrado de Python para NestJS com MariaDB. Para executar:
 
+### Opção 1: Com Docker (Recomendado)
 ```bash
 cd backend_nestjs
-```
-Instale as dependências:
-```bash
-npm install
-```
-Execute o servidor:
-```bash
-npm run start
+npm run docker:up
 ```
 O backend estará disponível em `http://localhost:3000`
+
+### Opção 2: Desenvolvimento local
+```bash
+cd backend_nestjs
+npm install
+npm run start:dev
+```
 
 ### Rotas disponíveis:
 - `GET /sos/setor` - Lista todos os setores
@@ -163,7 +165,7 @@ O backend estará disponível em `http://localhost:3000`
 - `PATCH /sos/setor/edit/:id` - Atualiza setor
 - `DELETE /sos/setor/:id` - Remove setor
 
-**_Atualmente usando dados mock. PostgreSQL + Prisma será configurado em breve..._**
+**_Backend NestJS + Prisma + MariaDB configurado com Docker para desenvolvimento padronizado._**
 
 ## Autores
 > (colocar linkedin ou github...)
