@@ -3,6 +3,8 @@
 
 <img src="https://img.shields.io/badge/version-0.0.0-green" /> <img src="https://img.shields.io/badge/npm-v11.4.2-orange" />
 
+<!-- Atualização 21/09/2025: Migração MariaDB + Docker completa!  -->
+
 Toda a frota de compactadores da Sotero é acompanhada 24 horas por dia. A fim de auxiliá-los neste desafio, o Núcleo de Inovação e Tecnologia (NITE) do Centro Universitário Jorge Amado (UNIJORGE) está desenvolvendo uma plataforma web de monitoramento desses veículos.
 
 <img src="public/sotero.png" />  
