@@ -1,0 +1,355 @@
+/* ESTILOS PADRÃO DE TODO O SITE */
+@import "tailwindcss";
+
+:root {
+  margin: 0 auto;
+  padding: 0 auto;
+  text-align: center;
+
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #45b2d0;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0 auto;
+  padding: 0 auto;
+  display: flex;
+  flex-direction: column;
+  place-items: center;
+  min-width: 100vh;
+  min-height: 100vh;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+a {
+  font-weight: 500;
+  color: #7d83ff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+  cursor: pointer;
+}
+
+h1 {
+  color: #1a1a1a;
+  font-size: 2em;
+  line-height: 2;
+}
+/*
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+  
+button:hover {
+  border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+  */
+/* Component / layout styling for forms, tables, painel, etc. */
+
+/* Base card refinement */
+.card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  box-shadow:
+          0 1px 2px rgba(0,0,0,.04),
+          0 4px 12px -2px rgba(0,0,0,.06);
+  text-align: left;
+  max-width: 1400px;
+  margin: 0 auto 28px;
+  color: #1f2937;
+  position: relative;
+}
+
+.dark .card {
+  background: #1f2937;
+  border-color: #334155;
+  color: #e2e8f0;
+  box-shadow:
+          0 1px 2px rgba(0,0,0,.4),
+          0 4px 14px -2px rgba(0,0,0,.55);
+}
+
+.card h2, .card h3 {
+  margin-top: 0;
+  font-weight: 600;
+  letter-spacing: .5px;
+}
+
+.status {
+  font-size: 0.85rem;
+  color: #475569;
+  margin-top: 8px;
+}
+
+.dark .status {
+  color: #94a3b8;
+}
+
+/* EditarAtendimento list layout */
+.lista {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.linha {
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+
+/* Tempo decorrido top chip */
+.tempo-topo {
+  background: #f1f5f9;
+  padding: 4px 10px;
+  border-radius: 30px;
+  font-weight: 600;
+  letter-spacing: .5px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 64px;
+}
+
+.dark .tempo-topo {
+  background: #2d3b4f;
+  color: #e2e8f0;
+}
+
+.tempo-topo.aviso-topo {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+.dark .tempo-topo.aviso-topo {
+  background: #4c1d1d;
+  color: #fca5a5;
+}
+
+/* Badges */
+.badge {
+  font-size: 0.65rem;
+  padding: 4px 10px;
+  border-radius: 24px;
+  font-weight: 600;
+  letter-spacing: .5px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #e2e8f0;
+  color: #334155;
+}
+
+.badge.ok {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.badge.proc {
+  background: #e0f2fe;
+  color: #075985;
+}
+
+.badge.erro {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.badge.aviso {
+  background: #fef9c3;
+  color: #854d0e;
+}
+
+.dark .badge {
+  background: #334155;
+  color: #e2e8f0;
+}
+
+.dark .badge.ok {
+  background: #14532d;
+  color: #86efac;
+}
+
+.dark .badge.proc {
+  background: #1e3a8a;
+  color: #bfdbfe;
+}
+
+.dark .badge.erro {
+  background: #7f1d1d;
+  color: #fecaca;
+}
+
+.dark .badge.aviso {
+  background: #713f12;
+  color: #fde68a;
+}
+
+/* Action buttons area inside SOS card */
+.acoes {
+  margin-top: 8px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+/* Subtle fade-in for cards */
+@keyframes fadeUp {
+  from {
+      opacity: 0;
+      transform: translateY(12px);
+  }
+  to {
+      opacity: 1;
+      transform: translateY(0);
+  }
+}
+
+.cartao-sos {
+  animation: fadeUp .4s ease both;
+}
+
+/* Accessible focus outline for keyboard users */
+.card button:focus-visible,
+.tabela-simples .linha:focus-visible,
+.cartao-sos:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 2px;
+}
+
+.dark .card button:focus-visible,
+.dark .tabela-simples .linha:focus-visible,
+.dark .cartao-sos:focus-visible {
+  outline: 3px solid #3b82f6;
+}
+
+/* Scroll helpers if needed */
+.lista {
+  max-height: 1200px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #94a3b8 #f1f5f9;
+}
+
+.lista::-webkit-scrollbar {
+  width: 8px;
+}
+
+.lista::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+.lista::-webkit-scrollbar-thumb {
+  background: #94a3b8;
+  border-radius: 100px;
+}
+
+.dark .lista {
+  scrollbar-color: #475569 #1f2937;
+}
+
+.dark .lista::-webkit-scrollbar-track {
+  background: #1f2937;
+}
+
+.dark .lista::-webkit-scrollbar-thumb {
+  background: #475569;
+}
+
+/* Utility for long text truncation (if needed in future) */
+.trunc {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Input subtle invalid styling (optional) */
+input:invalid:not(:focus):not(:placeholder-shown) {
+  border-color: #dc2626;
+}
+
+.dark input:invalid:not(:focus):not(:placeholder-shown) {
+  border-color: #ef4444;
+}
+
+/* Smooth transitions */
+*, *::before, *::after {
+  transition:
+          background-color .25s ease,
+          border-color .25s ease,
+          color .25s ease,
+          fill .25s ease,
+          stroke .25s ease;
+}
+
+/* Space under last paragraph in status blocks */
+.status:last-child {
+  margin-bottom: 0;
+}
