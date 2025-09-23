@@ -5,13 +5,13 @@ import { CreateSetorDto } from './dto/create-setor.dto';
 import { UpdateSetorDto } from './dto/update-setor.dto';
 
 @ApiTags('setores')
-@Controller('sos/setor')
+@Controller('setores')
 export class SetorController {
   constructor(private readonly setorService: SetorService) {}
 
-  @Post('create')
+  @Post()
   @ApiOperation({ 
-    summary: 'Cria novo setor',
+    summary: 'Criar novo setor',
     description: 'Cria um novo setor da empresa com nome e turno especificados.'
   })
   @ApiBody({ 
@@ -46,13 +46,13 @@ export class SetorController {
     }
   })
   @ApiResponse({ status: 400, description: 'Dados inválidos' })
-  create(@Body() createSetorDto: CreateSetorDto) {
-    return this.setorService.create(createSetorDto);
+  createSetor(@Body() createSetorDto: CreateSetorDto) {
+    return this.setorService.createSetor(createSetorDto);
   }
 
   @Get()
   @ApiOperation({ 
-    summary: 'Lista todos os setores',
+    summary: 'Listar todos os setores',
     description: 'Retorna lista completa de todos os setores cadastrados no sistema.'
   })
   @ApiResponse({ 
@@ -73,13 +73,13 @@ export class SetorController {
       ]
     }
   })
-  findAll() {
-    return this.setorService.findAll();
+  getAllSetores() {
+    return this.setorService.getAllSetores();
   }
 
   @Get(':id')
   @ApiOperation({ 
-    summary: 'Busca setor por ID',
+    summary: 'Buscar setor por ID',
     description: 'Retorna um setor específico baseado no ID fornecido.'
   })
   @ApiParam({ 
@@ -99,13 +99,13 @@ export class SetorController {
     }
   })
   @ApiResponse({ status: 404, description: 'Setor não encontrado' })
-  findOne(@Param('id') id: string) {
-    return this.setorService.findOne(+id);
+  getSetorById(@Param('id') setorId: string) {
+    return this.setorService.getSetorById(+setorId);
   }
 
-  @Patch('edit/:id')
+  @Patch(':id')
   @ApiOperation({ 
-    summary: 'Atualiza setor',
+    summary: 'Atualizar setor',
     description: 'Atualiza dados de um setor existente baseado no ID fornecido.'
   })
   @ApiParam({ 
@@ -145,13 +145,13 @@ export class SetorController {
   })
   @ApiResponse({ status: 404, description: 'Setor não encontrado' })
   @ApiResponse({ status: 400, description: 'Dados inválidos' })
-  update(@Param('id') id: string, @Body() updateSetorDto: UpdateSetorDto) {
-    return this.setorService.update(+id, updateSetorDto);
+  updateSetor(@Param('id') setorId: string, @Body() updateSetorDto: UpdateSetorDto) {
+    return this.setorService.updateSetor(+setorId, updateSetorDto);
   }
 
   @Delete(':id')
   @ApiOperation({ 
-    summary: 'Remove setor',
+    summary: 'Remover setor',
     description: 'Remove um setor do sistema baseado no ID fornecido. Esta ação é irreversível.'
   })
   @ApiParam({ 
@@ -170,7 +170,7 @@ export class SetorController {
     }
   })
   @ApiResponse({ status: 404, description: 'Setor não encontrado' })
-  remove(@Param('id') id: string) {
-    return this.setorService.remove(+id);
+  removeSetor(@Param('id') setorId: string) {
+    return this.setorService.removeSetor(+setorId);
   }
 }

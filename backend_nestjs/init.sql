@@ -2,7 +2,7 @@
 -- Este script é executado automaticamente quando o container é criado pela primeira vez
 
 -- Usar o banco de dados criado automaticamente
-USE sotero_sos;
+USE sotero_db;
 
 -- Configurações para otimizar o MariaDB
 SET sql_mode = 'STRICT_TRANS_TABLES,NO_ZERO_DATE,NO_ZERO_IN_DATE,ERROR_FOR_DIVISION_BY_ZERO';
