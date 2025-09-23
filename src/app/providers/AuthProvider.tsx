@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { AuthContext } from "@/app/providers/AuthContext";
-import type { User } from "@/entities/user/model/types";
-import { getUserFromLocalStorage } from "@/entities/user/lib/userLocalStorageActions";
-import { login, logout } from "@/entities/user/model/utils";
+import type { User } from "@/entities";
+import { getUserFromLocalStorage } from "@/entities/usuarios";
+import { login, logout } from "@/entities/usuarios";
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 	const [user, setUser] = useState<User | null>(null);
@@ -16,10 +16,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 	return (
 		<AuthContext.Provider
 			value={{
-				user,
+				users: user,
 				loading,
-				login: (username, is_admin) =>
-					login(username, is_admin, setUser),
+				login: (
+					username: string,
+					is_admin: boolean,
+					id: number,
+					hashed_password: string
+				) => login(username, is_admin, id, hashed_password, setUser),
 				logout: () => logout(setUser),
 				isAdmin: user?.is_admin ?? false,
 			}}

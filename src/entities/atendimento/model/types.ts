@@ -10,6 +10,7 @@ export type Atendimento = {
 	local: string | null;
 	matricula_motorista: number;
 	atrasado: boolean;
+	tempo_previsto_str: string | null; // HH:MM:SS
 	cod_motivo: number;
 	cod_veiculo: number;
 };

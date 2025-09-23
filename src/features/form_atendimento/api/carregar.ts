@@ -1,4 +1,4 @@
-import { supabase } from "@/shared/api/supabaseClient";
+import { supabase } from "@/app/api/supabaseClient";
 import { type FormAtendimentoProps } from "../index";
 
 export const carregarMotivos = async (props: FormAtendimentoProps) => {

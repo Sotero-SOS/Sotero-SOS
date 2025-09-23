@@ -1,11 +1,7 @@
 import { useEffect, useState } from "react";
-import { supabase } from "../../../shared/api/supabaseClient";
-import type { Motivo } from "../../../shared/config/types";
-
-function normalizarHora(hhmm: string): string {
-	if (!hhmm) return "";
-	return /^\d{2}:\d{2}$/.test(hhmm) ? `${hhmm}:00` : hhmm;
-}
+import type { Motivo } from "@/entities";
+import { carregarLista } from "../api/carregarLista";
+import { onSubmit } from "../api/onSubmit";
 
 export default function FormMotivo() {
 	const [descricao, setDescricao] = useState("");
@@ -16,54 +12,33 @@ export default function FormMotivo() {
 	const [lista, setLista] = useState<Motivo[]>([]);
 	const [carregandoLista, setCarregandoLista] = useState(false);
 
-	const carregarLista = async () => {
-		setCarregandoLista(true);
-		const { data, error } = await supabase
-			.from("motivo")
-			.select("*")
-			.order("descricao", { ascending: true });
-		if (error) {
-			setStatusMsg(`Erro ao carregar lista: ${error.message}`);
-		} else {
-			setLista(data || []);
-		}
-		setCarregandoLista(false);
-	};
-
 	useEffect(() => {
-		carregarLista();
-	}, []);
-
-	const onSubmit = async (e: React.FormEvent) => {
-		e.preventDefault();
-		setStatusMsg(null);
-
-		if (!descricao.trim() || !tempoPrevisto) {
-			setStatusMsg("Informe a descrição e o tempo previsto.");
-			return;
-		}
-
-		setCarregando(true);
-		const { error } = await supabase.from("motivo").insert({
-			descricao: descricao.trim(),
-			tempo_previsto: normalizarHora(tempoPrevisto),
+		carregarLista({
+			setLista,
+			setStatusMsg,
+			setCarregandoLista,
 		});
-
-		setCarregando(false);
-		if (error) {
-			setStatusMsg(`Erro ao salvar: ${error.message}`);
-		} else {
-			setStatusMsg("Motivo adicionado com sucesso!");
-			setDescricao("");
-			setTempoPrevisto("");
-			carregarLista();
-		}
-	};
+	}, []);
 
 	return (
 		<div className="card">
 			<h2>Adicionar Motivo</h2>
-			<form onSubmit={onSubmit}>
+			<form
+				onSubmit={(e) => {
+					e.preventDefault();
+					setCarregando(true);
+					setStatusMsg(null);
+					onSubmit({
+						e,
+						descricao,
+						tempoPrevisto,
+						setStatusMsg,
+						setCarregando,
+						setDescricao,
+						setTempoPrevisto,
+					});
+				}}
+			>
 				<label>
 					Descrição
 					<input

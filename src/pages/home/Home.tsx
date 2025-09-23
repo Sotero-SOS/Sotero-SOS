@@ -3,7 +3,7 @@ import { Outlet } from "react-router-dom";
 import { AppHeader } from "@/widgets/header/index";
 import { NavBar } from "@/widgets/navBar/index";
 
-const Home = () => {
+export const Home = () => {
 	const [sidebarVisible, setSidebarVisible] = useState(true);
 	const [theme, setTheme] = useState<"dark" | "light">(() =>
 		window.matchMedia("(prefers-color-scheme: dark)").matches
@@ -41,5 +41,3 @@ const Home = () => {
 		</div>
 	);
 };
-
-export default Home;

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
-import { supabase } from "@/shared/api/supabaseClient";
-import type { Driver, Motivo, Veiculo } from "@/entities";
+import { supabase } from "@/app/api/supabaseClient";
+import type { Motorista, Motivo, Veiculo } from "@/entities";
 
 function dataHoje(): string {
 	const d = new Date();
@@ -18,10 +18,10 @@ function horaAgora(): string {
 	return `${hh}:${mm}:${ss}`;
 }
 
-type DriverExpandido = Driver & { veiculo?: Veiculo | null };
+type DriverExpandido = Motorista & { veiculo?: Veiculo | null };
 
 export default function FormAtendimento() {
-	const [Drivers, setDrivers] = useState<Driver[]>([]);
+	const [Drivers, setDrivers] = useState<Motorista[]>([]);
 	const [motivos, setMotivos] = useState<Motivo[]>([]);
 	const [veiculos, setVeiculos] = useState<Veiculo[]>([]);
 	const [matricula, setMatricula] = useState<number | "">("");
@@ -34,7 +34,7 @@ export default function FormAtendimento() {
 		const carregar = async () => {
 			const [mRes, moRes, vRes] = await Promise.all([
 				supabase
-					.from("Driver")
+					.from("motorista")
 					.select("*")
 					.order("nome", { ascending: true }),
 				supabase
@@ -87,7 +87,7 @@ export default function FormAtendimento() {
 			final_sos: null,
 			status: "Aberto",
 			local: local.trim(),
-			matricula_Driver: Number(matricula),
+			matricula_motorista: Number(matricula),
 			cod_motivo: Number(codMotivo),
 			cod_veiculo: veic,
 		};
@@ -110,7 +110,7 @@ export default function FormAtendimento() {
 		<form onSubmit={onSubmit} className="card">
 			<h2>Abrir Atendimento (SOS)</h2>
 			<label>
-				Driver
+				Motorista
 				<select
 					value={matricula}
 					onChange={(e) =>
@@ -120,7 +120,7 @@ export default function FormAtendimento() {
 					}
 					required
 				>
-					<option value="">Selecione um Driver</option>
+					<option value="">Selecione um Motorista</option>
 					{DriversComVeiculo.map((m) => (
 						<option key={m.matricula} value={m.matricula}>
 							{m.nome}{" "}
