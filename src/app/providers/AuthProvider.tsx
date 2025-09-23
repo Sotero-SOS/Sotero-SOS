@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { AuthContext } from "@/app/providers/AuthContext";
 import type { User } from "@/entities/user/model/types";
 import { getUserFromLocalStorage } from "@/entities/user/lib/userLocalStorageActions";
-import { login, logout } from "@/entities/user/model/thunks";
+import { login, logout } from "@/entities/user/model/utils";
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 	const [user, setUser] = useState<User | null>(null);

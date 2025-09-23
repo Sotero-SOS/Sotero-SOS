@@ -1,10 +1,23 @@
 // Funções utilitárias reutilizadas em vários componentes.
 
-import type { Atendimento, Motorista, Motivo, Veiculo } from "@/shared/config/types";
+import type {
+    Atendimento,
+    Driver,
+    Motivo,
+    Veiculo,
+} from "@/entities";
 
 export function agora(): Date {
     return new Date();
 }
+
+export const dataHoje = (): string => {
+    const d = new Date();
+    const yyyy = d.getFullYear();
+    const mm = String(d.getMonth() + 1).padStart(2, "0");
+    const dd = String(d.getDate()).padStart(2, "0");
+    return `${yyyy}-${mm}-${dd}`;
+};
 
 export function horaAgora(): string {
     const d = new Date();
@@ -42,9 +55,10 @@ export function msToHHMMSS(ms: number): string {
     const hh = Math.floor(ms / 3600000);
     const mm = Math.floor((ms % 3600000) / 60000);
     const ss = Math.floor((ms % 60000) / 1000);
-    return `${String(hh).padStart(2, "0")}:${String(mm).padStart(2, "0")}:${String(
-        ss
-    ).padStart(2, "0")}`;
+    return `${String(hh).padStart(2, "0")}:${String(mm).padStart(
+        2,
+        "0"
+    )}:${String(ss).padStart(2, "0")}`;
 }
 
 export function formatarHora(h?: string | null): string {
@@ -75,7 +89,7 @@ export interface AtendimentoEnriquecido extends Atendimento {
  */
 export function enriquecerAtendimentos(args: {
     atendimentos: Atendimento[];
-    motoristas: Motorista[];
+    motoristas: Driver[];
     motivos: Motivo[];
     veiculos?: Veiculo[];
     tick: number; // usado para re-render de tempo decorrido
@@ -89,7 +103,10 @@ export function enriquecerAtendimentos(args: {
         if (m.matricula != null) mapaMotorista.set(m.matricula, m.nome);
     });
 
-    const mapaMotivo = new Map<number, { descricao: string; tempo: string | null }>();
+    const mapaMotivo = new Map<
+        number,
+        { descricao: string; tempo: string | null }
+    >();
     motivos.forEach((mot) => {
         if (mot.cod_motivo != null)
             mapaMotivo.set(mot.cod_motivo, {
@@ -112,7 +129,9 @@ export function enriquecerAtendimentos(args: {
         let calculadoAtrasado = false;
         if (inicio && msPrev > 0) {
             const final =
-                a.status === "Fechado" ? parseDataHora(a.data ?? null, a.final_sos ?? null) : null;
+                a.status === "Fechado"
+                    ? parseDataHora(a.data ?? null, a.final_sos ?? null)
+                    : null;
             const atual = final ?? agora();
             const diff = atual.getTime() - inicio.getTime();
             calculadoAtrasado = diff > msPrev;
@@ -146,5 +165,4 @@ export function enriquecerAtendimentos(args: {
             veiculo: mapaVeiculo.get(a.cod_veiculo) ?? null,
         };
     });
-
 }

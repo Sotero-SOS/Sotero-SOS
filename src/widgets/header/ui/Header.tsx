@@ -6,6 +6,7 @@ import { ThemeButton } from "@/widgets/theme-switcher/ui/ThemeButton";
 
 /*FC = Functional Component*/
 
+/* Criar componente User Profile */
 const UserProfile: FC = () => (
 	<div className="w-10 h-10 rounded-md overflow-hidden">
 		<img
