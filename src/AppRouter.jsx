@@ -15,6 +15,9 @@ import FormUser from "./components/FormUser.jsx";
 import { useAuth } from "./lib/AuthProvider.jsx";
 import FormAtendimento from "./components/FormAtendimento.js";
 
+/**
+ * Layout que protege rotas: se não estiver logado, redireciona para "/" (login).
+ */
 function ProtectedLayout() {
   const { user, loading } = useAuth();
 
@@ -33,6 +36,11 @@ function ProtectedLayout() {
   return <LayoutApp />;
 }
 
+/**
+ * Roteamento principal da aplicação.
+ * - "/" é tela de login.
+ * - "/Home" e filhos exigem autenticação.
+ */
 const router = createBrowserRouter([
   { path: "/", element: <AppLogin /> },
   {
@@ -62,4 +70,9 @@ const router = createBrowserRouter([
 
 export default function AppRouter() {
   return <RouterProvider router={router} />;
+<<<<<<< HEAD
 }
+=======
+
+}
+>>>>>>> origin

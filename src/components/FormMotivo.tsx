@@ -2,11 +2,16 @@ import { useEffect, useState } from 'react';
 import { supabase } from '../supabaseClient';
 import type { Motivo } from '../types';
 
+/** Garante formato HH:MM:SS (se vier HH:MM adiciona :00) */
 function normalizarHora(hhmm: string): string {
     if (!hhmm) return '';
     return /^\d{2}:\d{2}$/.test(hhmm) ? `${hhmm}:00` : hhmm;
 }
 
+/**
+ * Cadastro de motivos de SOS.
+ * Cada motivo pode ter um tempo previsto (usado para calcular atrasos).
+ */
 export default function FormMotivo() {
     const [descricao, setDescricao] = useState('');
     const [tempoPrevisto, setTempoPrevisto] = useState(''); // HH:MM
@@ -16,6 +21,7 @@ export default function FormMotivo() {
     const [lista, setLista] = useState<Motivo[]>([]);
     const [carregandoLista, setCarregandoLista] = useState(false);
 
+    // Busca lista de motivos para exibir abaixo do formulário
     const carregarLista = async () => {
         setCarregandoLista(true);
         const { data, error } = await supabase
@@ -90,6 +96,7 @@ export default function FormMotivo() {
                 {statusMsg && <p className="status">{statusMsg}</p>}
             </form>
 
+            {/* Lista de motivos existentes */}
             <div style={{ marginTop: 24 }}>
                 <h3 style={{ margin: '8px 0' }}>Motivos cadastrados</h3>
                 {carregandoLista ? (
@@ -115,4 +122,5 @@ export default function FormMotivo() {
             </div>
         </div>
     );
+
 }

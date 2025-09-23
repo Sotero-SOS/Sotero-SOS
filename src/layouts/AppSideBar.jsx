@@ -12,6 +12,10 @@ import { FaTruck } from "react-icons/fa";
 import { FaUsers, FaLayerGroup, FaListUl } from "react-icons/fa6";
 import { useAuth } from "../lib/AuthProvider.jsx";
 
+/**
+ * Link individual da sidebar.
+ * - Mostra tooltip quando colapsado.
+ */
 const SidebarLink = ({ to, icon, text, expanded, end = false }) => (
     <li>
         <NavLink
@@ -30,8 +34,8 @@ const SidebarLink = ({ to, icon, text, expanded, end = false }) => (
         >
             {icon}
             <span className={`overflow-hidden transition-all ${expanded ? "w-40 ml-3" : "w-0"}`}>
-        {text}
-      </span>
+                {text}
+            </span>
             {!expanded && (
                 <div
                     className="absolute left-full rounded-md px-2 py-1 ml-6 bg-slate-800 text-white text-sm
@@ -45,6 +49,11 @@ const SidebarLink = ({ to, icon, text, expanded, end = false }) => (
     </li>
 );
 
+/**
+ * Barra lateral de navegação.
+ * - Expande ao passar o mouse.
+ * - Exibe usuário logado e botão de logout.
+ */
 function AppSideBar() {
     const [expanded, setExpanded] = useState(false);
     const { logout, user /*, isAdmin*/ } = useAuth();
@@ -62,6 +71,7 @@ function AppSideBar() {
             onMouseLeave={() => setExpanded(false)}
         >
             <nav className="h-full flex flex-col bg-white border-r shadow-xl dark:bg-slate-800 dark:border-slate-700">
+                {/* Logo (alternando entre ícone e versão completa) */}
                 <div className={`h-16 w-full relative flex items-center justify-center`}>
                     <img
                         src="/logo.png"
@@ -75,6 +85,7 @@ function AppSideBar() {
                     />
                 </div>
 
+                {/* Links de navegação */}
                 <ul className="flex-1 px-3">
                     <SidebarLink
                         to="/Home"
@@ -133,6 +144,7 @@ function AppSideBar() {
                     />
                 </ul>
 
+                {/* Rodapé com usuário e logout */}
                 <div className="border-t p-3 dark:border-slate-700 text-xs text-center text-gray-500 dark:text-gray-400">
                     {expanded && user && (
                         <div className="mb-2">
@@ -146,13 +158,14 @@ function AppSideBar() {
                     >
                         <FiLogOut size={22} />
                         <span className={`overflow-hidden transition-all ${expanded ? "w-40 ml-3" : "w-0"}`}>
-              Sair da conta
-            </span>
+                            Sair da conta
+                        </span>
                     </button>
                 </div>
             </nav>
         </aside>
     );
 }
+
 
 export default AppSideBar;

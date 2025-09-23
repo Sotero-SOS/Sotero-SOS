@@ -1,7 +1,11 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
+/**
+ * Contexto de autenticação simples baseado em localStorage.
+ * IMPORTANTE: Não faz verificação no servidor nem usa tokens reais.
+ */
 const AuthContext = createContext({
-    user: null,          // { username, is_admin } or null
+    user: null,
     loading: true,
     login: async (_u, _p) => ({ ok: false, error: 'not implemented' }),
     logout: () => {},
@@ -14,13 +18,12 @@ export function AuthProvider({ children }) {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    // Load session from localStorage
+    // Tenta carregar sessão gravada no localStorage ao iniciar
     useEffect(() => {
         try {
             const raw = localStorage.getItem(STORAGE_KEY);
             if (raw) {
                 const parsed = JSON.parse(raw);
-
                 setUser(parsed);
             }
         } catch (e) {
@@ -31,6 +34,10 @@ export function AuthProvider({ children }) {
         }
     }, []);
 
+    /**
+     * Login "fake": só grava dados localmente.
+     * (Em produção deveria chamar backend e receber token/claims)
+     */
     const login = async (username, is_admin) => {
         const sessionObj = { username, is_admin: !!is_admin, issued_at: Date.now() };
         localStorage.setItem(STORAGE_KEY, JSON.stringify(sessionObj));
@@ -59,4 +66,5 @@ export function AuthProvider({ children }) {
 
 export function useAuth() {
     return useContext(AuthContext);
+
 }

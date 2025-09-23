@@ -16,13 +16,18 @@ type Props = {
     onClose?: () => void;
 };
 
+/**
+ * Componente para editar um atendimento específico ou,
+ * se nenhum id for passado, listar todos os "abertos" sem chegada na garagem.
+ */
 export default function EditarAtendimento({ id: selectedId = null, onClose }: Props) {
+    // Dados crus das tabelas
     const [rawAtendimentos, setRawAtendimentos] = useState<Atendimento[]>([]);
     const [motoristas, setMotoristas] = useState<Motorista[]>([]);
     const [motivos, setMotivos] = useState<Motivo[]>([]);
     const [veiculos, setVeiculos] = useState<Veiculo[]>([]);
 
-    // Campos editáveis
+    // Campos de edição por atendimento (um pequeno "cache" local por id)
     const [auxiliar, setAuxiliar] = useState<Record<number, string>>({});
     const [fiscal, setFiscal] = useState<Record<number, string>>({});
     const [chegada, setChegada] = useState<Record<number, string>>({});
@@ -30,13 +35,18 @@ export default function EditarAtendimento({ id: selectedId = null, onClose }: Pr
     const [carregando, setCarregando] = useState(false);
     const [statusMsg, setStatusMsg] = useState<string | null>(null);
 
-    // Tick para atualizar tempo decorrido em aberto
+    // Tick a cada 1s apenas para recalcular tempo decorrido dinamicamente
     const [tick, setTick] = useState(0);
     useEffect(() => {
         const id = setInterval(() => setTick(t => t + 1), 1000);
         return () => clearInterval(id);
     }, []);
 
+    /**
+     * Carrega os dados necessários.
+     * - Se houver id selecionado, busca só aquele atendimento.
+     * - Caso contrário, pega todos sem chegada_na_garagem (abertos).
+     */
     const carregar = async () => {
         setStatusMsg(null);
         setCarregando(true);
@@ -67,6 +77,7 @@ export default function EditarAtendimento({ id: selectedId = null, onClose }: Pr
             setCarregando(false);
             return;
         }
+        // Outros erros não travam a tela, apenas logam
         if (motErr) console.error(motErr);
         if (motivosErr) console.error(motivosErr);
         if (veicErr) console.error(veicErr);
@@ -83,6 +94,7 @@ export default function EditarAtendimento({ id: selectedId = null, onClose }: Pr
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedId]);
 
+    // Enriquecemos os atendimentos (cálculo de tempo, nomes, etc.)
     const itens: AtendimentoEnriquecido[] = useMemo(
         () =>
             enriquecerAtendimentos({
@@ -95,6 +107,11 @@ export default function EditarAtendimento({ id: selectedId = null, onClose }: Pr
         [rawAtendimentos, motoristas, motivos, veiculos, tick]
     );
 
+    /**
+     * Atualiza um atendimento individual com os campos editados localmente.
+     * - Se informar chegada_na_garagem, também marca final_sos e status "Fechado".
+     * - Calcula atraso comparando tempo previsto e tempo decorrido.
+     */
     const atualizar = async (id: number) => {
         setStatusMsg(null);
         const aux = auxiliar[id]?.trim() || null;
@@ -106,12 +123,14 @@ export default function EditarAtendimento({ id: selectedId = null, onClose }: Pr
             fiscal: fic,
         };
 
+        // Se usuário informou hora de chegada, fechamos automaticamente
         if (chg) {
             const chegadaHHMMSS = /^\d{2}:\d{2}$/.test(chg) ? `${chg}:00` : chg;
             updatePayload.chegada_na_garagem = chegadaHHMMSS;
             updatePayload.final_sos = horaAgora();
             updatePayload.status = 'Fechado';
 
+            // Cálculo de atraso
             const item = itens.find(x => x.nr_atendimento === id);
             if (item) {
                 const inicio = parseDataHora(item.data ?? null, item.inicio_sos ?? null);
@@ -142,6 +161,7 @@ export default function EditarAtendimento({ id: selectedId = null, onClose }: Pr
     const titulo = selectedId ? `Editar Atendimento #${selectedId}` : 'Editar Atendimento';
     const itensMostrados = itens;
 
+    // Feedbacks para casos sem dados
     if (selectedId && itensMostrados.length === 0) {
         return (
             <div className="card">
@@ -155,7 +175,6 @@ export default function EditarAtendimento({ id: selectedId = null, onClose }: Pr
             </div>
         );
     }
-
     if (!selectedId && itensMostrados.length === 0 && !carregando) {
         return (
             <div className="card">
@@ -185,6 +204,7 @@ export default function EditarAtendimento({ id: selectedId = null, onClose }: Pr
                     const excedeuPrevisto = (a.tempo_decorrido_ms ?? 0) > previstoMs && previstoMs > 0;
                     return (
                         <div key={a.nr_atendimento} className="linha" style={{ border: '1px solid #eee', padding: 12, borderRadius: 6, marginBottom: 12 }}>
+                            {/* Coluna de informações */}
                             <div className="col" style={{ flex: 1, minWidth: 260 }}>
                                 <strong style={{ fontSize: 16 }}>Atendimento #{a.nr_atendimento}</strong>
                                 <div>Motorista: {a.motorista_nome ?? a.matricula_motorista ?? '—'}</div>
@@ -200,8 +220,8 @@ export default function EditarAtendimento({ id: selectedId = null, onClose }: Pr
                                 <div>
                                     Tempo decorrido:{' '}
                                     <span style={excedeuPrevisto ? {} : {}}>
-                    {a.tempo_decorrido ?? '—'}
-                  </span>
+                                        {a.tempo_decorrido ?? '—'}
+                                    </span>
                                 </div>
                                 <div>Atrasado: {a.atrasado ? 'Sim' : 'Não'}</div>
                                 <div>Auxiliar atual: {show(a.auxiliar_de_trafego)}</div>
@@ -211,6 +231,7 @@ export default function EditarAtendimento({ id: selectedId = null, onClose }: Pr
                                 <div>Cód. veículo: {show(a.cod_veiculo)}</div>
                             </div>
 
+                            {/* Coluna de edição */}
                             <div className="col" style={{ flex: 1, minWidth: 240, display: 'flex', flexDirection: 'column', gap: 8 }}>
                                 <label style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
                                     <span>Auxiliar de tráfego*</span>
@@ -262,4 +283,5 @@ export default function EditarAtendimento({ id: selectedId = null, onClose }: Pr
             {statusMsg && <p className="status" style={{ marginTop: 12 }}>{statusMsg}</p>}
         </div>
     );
+
 }

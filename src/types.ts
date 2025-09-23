@@ -1,4 +1,4 @@
-// Tipos auxiliares para as tabelas (opcional, ajuda no autocomplete)
+// Tipos auxiliares para as tabelas
 export type Setor = {
     id: number;
     nome_setor: string;
