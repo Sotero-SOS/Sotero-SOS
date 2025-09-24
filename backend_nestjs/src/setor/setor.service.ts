@@ -74,43 +74,142 @@ export class SetorService {
 
   // Busca um setor específico pelo ID
   async getSetorById(setorId: number): Promise<ApiResponse<Setor | null>> {
-    // Substituir por this.prisma.setor.findUnique() quando banco estiver pronto
-    const setores: Setor[] = [
-      { id: 1, nome_setor: 'Operações', turno: 'manha' },
-      { id: 2, nome_setor: 'Operações', turno: 'tarde' },
-      { id: 3, nome_setor: 'Operações', turno: 'noite' }
-    ];
+    try {
+      const setorPrisma = await this.prisma.setor.findUnique({
+        where: {
+          id: setorId
+        }
+      });
+      
+      if (!setorPrisma) {
+        throw new HttpException(
+          `Setor com ID ${setorId} não encontrado`, 
+          HttpStatus.NOT_FOUND
+        );
+      }
+      
+      // Converte o retorno do Prisma para nossa interface
+      const setor: Setor = {
+        id: setorPrisma.id,
+        nome_setor: setorPrisma.nome_setor,
+        turno: setorPrisma.turno || undefined  // Converte null para undefined
+      };
 
-    const setor = setores.find(s => s.id === setorId);
-
-    return {
-      data: setor || null,
-      message: setor ? 'Setor encontrado com sucesso' : 'Setor não encontrado'
-    };
+      return {
+        data: setor,
+        message: 'Setor encontrado com sucesso'
+      };
+    } catch (error) {
+      // Se já é uma HttpException, repassa
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      
+      // Para outros erros de banco
+      throw new HttpException(
+        'Erro ao buscar setor', 
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
+    }
   }
 
   // Atualiza dados de um setor existente
   async updateSetor(setorId: number, updateSetorDto: UpdateSetorDto): Promise<ApiResponse<Setor | null>> {
-    // Substituir por this.prisma.setor.update() quando banco estiver pronto
-    const setorExistente = { id: setorId, nome_setor: 'Operações', turno: 'manha' as const };
-    
-    const setorAtualizado: Setor = {
-      ...setorExistente,
-      ...updateSetorDto
-    };
+    try {
+      // Verifica se o setor existe antes de tentar atualizar
+      const setorExistente = await this.prisma.setor.findUnique({
+        where: { id: setorId }
+      });
 
-    return {
-      data: setorAtualizado,
-      message: 'Setor atualizado com sucesso'
-    };
+      if (!setorExistente) {
+        throw new HttpException(
+          `Setor com ID ${setorId} não encontrado`, 
+          HttpStatus.NOT_FOUND
+        );
+      }
+
+      // Atualiza o setor
+      const setorPrismaAtualizado = await this.prisma.setor.update({
+        where: { id: setorId },
+        data: updateSetorDto
+      });
+      
+      // Converte o retorno do Prisma para nossa interface
+      const setorAtualizado: Setor = {
+        id: setorPrismaAtualizado.id,
+        nome_setor: setorPrismaAtualizado.nome_setor,
+        turno: setorPrismaAtualizado.turno || undefined  // Converte null para undefined
+      };
+
+      return {
+        data: setorAtualizado,
+        message: 'Setor atualizado com sucesso'
+      };
+    } catch (error) {
+      // Se já é uma HttpException, repassa
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      
+      // Verifica se é erro de constraint única (nome_setor duplicado)
+      if (error.code === 'P2002') {
+        throw new HttpException(
+          'Já existe um setor com esse nome', 
+          HttpStatus.CONFLICT
+        );
+      }
+      
+      // Para outros erros de banco
+      throw new HttpException(
+        'Erro ao atualizar setor', 
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
+    }
   }
 
   // Remove um setor do sistema
   async removeSetor(setorId: number): Promise<ApiResponse<{ id: number }>> {
-    // Substituir por this.prisma.setor.delete() quando banco estiver pronto
-    return {
-      data: { id: setorId },
-      message: 'Setor removido com sucesso'
-    };
+    try {
+      // Verifica se o setor existe antes de tentar remover
+      const setorExistente = await this.prisma.setor.findUnique({
+        where: { id: setorId }
+      });
+
+      if (!setorExistente) {
+        throw new HttpException(
+          `Setor com ID ${setorId} não encontrado`, 
+          HttpStatus.NOT_FOUND
+        );
+      }
+
+      // Remove o setor
+      await this.prisma.setor.delete({
+        where: { id: setorId }
+      });
+
+      return {
+        data: { id: setorId },
+        message: 'Setor removido com sucesso'
+      };
+    } catch (error) {
+      // Se já é uma HttpException, repassa
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      
+      // Verifica se é erro de integridade referencial (setor sendo usado em outras tabelas)
+      if (error.code === 'P2003') {
+        throw new HttpException(
+          'Não é possível remover este setor pois ele está sendo utilizado em outros registros', 
+          HttpStatus.CONFLICT
+        );
+      }
+      
+      // Para outros erros de banco
+      throw new HttpException(
+        'Erro ao remover setor', 
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
+    }
   }
 }

@@ -4,9 +4,10 @@ import { AppService } from './app.service';
 import { SetorModule } from './setor/setor.module';
 import { HealthController } from './health/health.controller';
 import { PrismaModule } from './common/prisma/prisma.module';
+import { MotoristaModule } from './motorista/motorista.module';
 
 @Module({
-  imports: [PrismaModule, SetorModule],
+  imports: [PrismaModule, SetorModule, MotoristaModule],
   controllers: [AppController, HealthController],
   providers: [AppService],
 })
