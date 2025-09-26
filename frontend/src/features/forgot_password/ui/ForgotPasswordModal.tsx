@@ -1,4 +1,4 @@
-function ForgotPasswordModal({ isOpen, onClose }) {
+function ForgotPasswordModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void; }) {
   if (!isOpen) return null;
 
   return (

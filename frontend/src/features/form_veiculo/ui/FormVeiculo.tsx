@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { onSubmit, carregarLista } from "../index";
-import type { Categoria, Veiculo } from "@/entities/vehicle";
+import type { Categoria, Veiculo } from "@/entities/veiculos";
 
 // Mock de dados para a tabela 'categorias' que ainda não existe.
 // Simula a resposta que a API do Supabase retornaria.

@@ -1,4 +1,4 @@
-import { Motorista } from "@/entities";
+import { type Motorista } from "@/entities";
 
 export type MotoristaExpandido = Motorista & {
 	setor_nome?: string | null;

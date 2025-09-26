@@ -5,7 +5,7 @@ import { carregarListaUsuarios, onSubmitUsuario } from "../index";
 import { limpar } from "../lib/utils";
 
 export default function FormUser() {
-	const { user /*, isAdmin */ } = useAuth();
+	const { users /*, isAdmin */ } = useAuth();
 
 	// If you want only admins to access, uncomment:
 	// if (!isAdmin) {
@@ -129,10 +129,10 @@ export default function FormUser() {
 					</button>
 				</div>
 				{statusMsg && <p className="status">{statusMsg}</p>}
-				{user && (
+				{users && (
 					<p className="status" style={{ marginTop: 8 }}>
-						Logado como <strong>{user.username}</strong>
-						{user.is_admin ? " (admin)" : ""}.
+						Logado como <strong>{users.username}</strong>
+						{users.is_admin ? " (admin)" : ""}.
 					</p>
 				)}
 			</form>

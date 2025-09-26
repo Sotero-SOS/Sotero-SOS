@@ -3,6 +3,7 @@ import { AuthContext } from "@/app/providers/AuthContext";
 import type { User } from "@/entities";
 import { getUserFromLocalStorage } from "@/entities/usuarios";
 import { login, logout } from "@/entities/usuarios";
+import { useNavigate } from "react-router-dom";
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 	const [user, setUser] = useState<User | null>(null);
@@ -20,10 +21,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 				loading,
 				login: (
 					username: string,
-					is_admin: boolean,
 					id: number,
-					hashed_password: string
-				) => login(username, is_admin, id, hashed_password, setUser),
+					is_admin: boolean,
+				) => login(username, id, is_admin, useNavigate, setUser),
 				logout: () => logout(setUser),
 				isAdmin: user?.is_admin ?? false,
 			}}

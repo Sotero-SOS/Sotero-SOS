@@ -68,7 +68,7 @@ const SidebarLink: FC<SidebarLinkProps> = (props) => (
  */
 const NavBar: FC<SidebarLinkProps> = () => {
 	const [expanded, setExpanded] = useState(false);
-	const { logout, user /*, isAdmin*/ } = useAuth();
+	const { logout, users /*, isAdmin*/ } = useAuth();
 	const navigate = useNavigate();
 
 	const handleLogout = () => {
@@ -166,13 +166,13 @@ const NavBar: FC<SidebarLinkProps> = () => {
 
 				{/* Rodapé com usuário e logout */}
 				<div className="border-t p-3 dark:border-slate-700 text-xs text-center text-gray-500 dark:text-gray-400">
-					{expanded && user && (
+					{expanded && users && (
 						<div className="mb-2 truncate">
 							Logado como:{" "}
 							<span className="font-semibold">
-								{user.username}
+								{users.username}
 							</span>
-							{user.is_admin && (
+							{users.is_admin && (
 								<span className="ml-1 text-green-600 dark:text-green-400">
 									(admin)
 								</span>

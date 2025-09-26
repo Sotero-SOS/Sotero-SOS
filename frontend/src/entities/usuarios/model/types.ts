@@ -7,5 +7,5 @@ export type User = {
 	username: string;
 	is_admin?: boolean;
 	hashed_password?: string;
-	tipo: string; // Optional: may not be present in all contexts
+	tipo?: string; // Optional: may not be present in all contexts
 };

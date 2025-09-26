@@ -1,4 +1,4 @@
-import React, { type FC } from "react";
+import { type FC } from "react";
 import { FiMenu, FiChevronsLeft } from "react-icons/fi";
 import type { HeaderProps } from "../model/types";
 import type { ThemeProps } from "@/widgets/theme-switcher/model/types";

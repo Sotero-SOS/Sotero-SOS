@@ -11,9 +11,9 @@ export interface AuthContextType {
 	loading: boolean;
 	login: (
 		username: string,
-		is_admin: boolean,
 		id: number,
-		hashed_password: string
+		is_admin: boolean,
+		tipo: string
 	) => Promise<{ ok: boolean; error?: string }>;
 	logout: () => void;
 	isAdmin: boolean;
