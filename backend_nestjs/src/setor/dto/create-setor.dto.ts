@@ -8,6 +8,7 @@ export class CreateSetorDto {
     minLength: 3,
     maxLength: 100
   })
+  @ApiProperty({ example: 'Operações Manhã', description: 'Nome do setor' })
   nome_setor: string;
 
   @ApiProperty({
@@ -16,5 +17,6 @@ export class CreateSetorDto {
     enum: ['manha', 'tarde', 'noite', 'madrugada'],
     required: false
   })
+  @ApiProperty({ example: 'manha', description: 'Turno do setor', required: false })
   turno?: 'manha' | 'tarde' | 'noite' | 'madrugada';
 }

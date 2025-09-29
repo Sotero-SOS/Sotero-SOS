@@ -31,6 +31,7 @@ export class MotoristaService {
 
       return motorista;
     } catch (error) {
+      console.error('Erro detalhado ao criar motorista:', error);
       throw new HttpException('Erro ao criar motorista', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
@@ -62,11 +63,56 @@ export class MotoristaService {
 
   // Atualiza motorista
   async updateMotorista(id: number, updateMotoristaDto: UpdateMotoristaDto) {
-    return `This action updates a #${id} motorista`;
+    try {
+      // Verifica se o motorista existe
+      const motorista = await this.prisma.motorista.findUnique({
+        where: { matricula: id }
+      });
+      if (!motorista) {
+        throw new HttpException('Motorista não encontrado', HttpStatus.NOT_FOUND);
+      }
+
+      // Valida setor se informado
+      if (updateMotoristaDto.setor_id) {
+        const setor = await this.prisma.setor.findUnique({
+          where: { id: updateMotoristaDto.setor_id }
+        });
+        if (!setor) {
+          throw new HttpException('Setor não encontrado', HttpStatus.BAD_REQUEST);
+        }
+      }
+
+      // Atualiza motorista
+      const motoristaAtualizado = await this.prisma.motorista.update({
+        where: { matricula: id },
+        data: updateMotoristaDto,
+        include: { setor: true }
+      });
+      return motoristaAtualizado;
+    } catch (error) {
+      throw new HttpException('Erro ao atualizar motorista', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   // Remove motorista
-  removeMotorista(id: number) {
-    return `This action removes a #${id} motorista`;
+  async removeMotorista(id: number) {
+    try {
+      // Verifica se o motorista existe
+      const motorista = await this.prisma.motorista.findUnique({
+        where: { matricula: id }
+      });
+      if (!motorista) {
+        throw new HttpException('Motorista não encontrado', HttpStatus.NOT_FOUND);
+      }
+
+      // Remove motorista
+      await this.prisma.motorista.delete({
+        where: { matricula: id }
+      });
+      return { message: 'Motorista removido com sucesso.' };
+    } catch (error) {
+      throw new HttpException('Erro ao remover motorista', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
+
 }
