@@ -1,8 +1,8 @@
-import type { Driver, Motivo, Veiculo } from "@/entities";
+import type { Motorista, Motivo, Veiculo } from "@/entities";
 
 export type FormAtendimentoProps = {
-	motoristas: Driver[];
-	setMotoristas: (value: Driver) => void;
+	motoristas: Motorista[];
+	setMotoristas: (value: Motorista[]) => void;
 	motivos: Motivo[];
 	setMotivos: (value: Motivo[]) => void;
 	veiculos: Veiculo[];

@@ -147,8 +147,8 @@ export default function EditarAtendimento({
 									Veículo:{" "}
 									{a.veiculo
 										? `${a.veiculo.cod_veiculo}${
-												a.veiculo.categoria_id
-													? ` (${a.veiculo.categoria_id})`
+												a.veiculo.categoria
+													? ` (${a.veiculo.categoria})`
 													: ""
 										  }`
 										: show(a.cod_veiculo)}

@@ -95,8 +95,8 @@ export const FormLogin = () => {
 							setUser: (user: User | null) =>
 								void login(
 									user?.username || "",
-									user?.is_admin || false,
 									user?.id || 0,
+									user?.is_admin || false,
 									user?.hashed_password || ""
 								),
 							navigate,

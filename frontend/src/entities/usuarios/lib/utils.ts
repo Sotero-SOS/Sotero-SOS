@@ -4,7 +4,7 @@ import type { User } from "@/entities";
 export const login = async (
 	username: string,
 	id: number,
-	tipo: string,
+	is_admin: boolean,
 	navigate: (rota: string, options: { replace: boolean }) => void, // Changed from any to specific type
 	setUser: (user: User | null) => void // Changed from any to specific type
 ): Promise<{ ok: boolean; error?: string }> => {
@@ -12,7 +12,7 @@ export const login = async (
 		const sessionObj: User = {
 			id,
 			username,
-			tipo,
+			is_admin,
 		};
 		localStorage.setItem(STORAGE_KEY, JSON.stringify(sessionObj));
 		setUser(sessionObj);
